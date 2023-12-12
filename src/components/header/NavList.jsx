@@ -1,27 +1,19 @@
 import React from 'react';
-import { Link, List, ListItem, ListItemButton } from '@mui/material';
+import { List, ListItem, ListItemButton } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { setAuthState } from "../../store/LoginSlice";
 
-const navbarLinks = ["Home", "about me", "my Expertise", "my works", "login"]
-const listItems = navbarLinks.map(link => (
-    <ListItem key={link}>
-        <ListItemButton
-            sx={{
-                backgroundColor: link === "login" ? "#00000056" : "",
-                "&:hover": { backgroundColor: link === "login" ? "#00000056" : "" },
-                "& a": { color: "#fff" },
-                "@media(max-width: 768px)": {
-                    "& a": { color: "#000" },
-                }
-            }}
-        >
-            <Link>
-                {link}
-            </Link>
-        </ListItemButton>
-    </ListItem>
-))
+const navbarLinks = ["login", "signup"]
 
 const NavList = ({ showState }) => {
+    const dispatch = useDispatch();
+
+    const setAuthStateHandler = (state) => {
+        dispatch(setAuthState(state))
+    }
+
     return (
         <List
             sx={{
@@ -46,7 +38,31 @@ const NavList = ({ showState }) => {
                 }
             }}
         >
-            {listItems}
+            {
+                navbarLinks.map(link => (
+                    <ListItem key={link}>
+                        <ListItemButton
+                            sx={{
+                                mb: 2,
+                                backgroundColor: link === "login" ? "#00000056" : "",
+                                "&:hover": { backgroundColor: link === "login" ? "#00000056" : "" },
+                                "& a": { color: "#fff" },
+                                "@media(max-width: 768px)": {
+                                    "& a": { color: "#000" },
+                                }
+                            }}
+                        >
+                            <Link to={`/${link}`} onClick={() => setAuthStateHandler(link)}>
+                                <Typography sx={{
+                                    "@media(max-width: 767px)": {
+                                        color: 'black'
+                                    }
+                                }}>{link}</Typography>
+                            </Link>
+                        </ListItemButton>
+                    </ListItem>
+                ))
+            }
         </List>
     )
 }
