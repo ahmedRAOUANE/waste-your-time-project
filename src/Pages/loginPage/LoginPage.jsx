@@ -1,12 +1,20 @@
 import React, { useEffect, useRef } from 'react';
-import { Box, Button, Container, FormGroup, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Container, FormGroup, TextField, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getData, sendData } from "../../store/LoginSlice";
+import { getData, sendData, getUserData } from "../../store/LoginSlice";
+// import Loading from '../../components/loading/Loading';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const authState = useSelector(state => state.login.authState);
+  const userExists = useSelector(state => state.login.userExists);
+  const serverData = useSelector(state => state.login.serverData);
+  const isLoggedin = useSelector(state => state.login.isLoggedIn);
+
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const name = useRef();
   const number = useRef();
@@ -15,25 +23,26 @@ const LoginPage = () => {
   const submitDataHandler = (e) => {
     e.preventDefault();
     const data = {
-      name: name.current.value,
+      userName: name.current.value,
       number: number.current.value,
       password: password.current.value
     }
 
+    dispatch(getUserData(data))
+
     if (authState === "login") {
-      dispatch(getData(data));
+      dispatch(getData());
     }
     else if (authState === "signup") {
       dispatch(sendData(data));
     }
   }
 
-  // useEffect to listen to state updates
   useEffect(() => {
-    // This function will be called whenever the loginSlice state changes
-    console.log("State in loginSlice has been updated:", authState);
-    // You can perform additional actions based on the state update
-  }, [authState]); // Include authState in the dependency array to run the effect when it changes
+    if (isLoggedin) {
+      navigate('/home');
+    }
+  }, [isLoggedin, navigate])
 
   return (
     <Container sx={{ mt: '80px' }}>
@@ -44,7 +53,7 @@ const LoginPage = () => {
             sx={{
               maxWidth: '500px',
               margin: 'auto',
-              height: '250px',
+              height: '300px',
               display: 'flex',
               justifyContent: 'space-between'
             }}
@@ -52,8 +61,11 @@ const LoginPage = () => {
             <TextField placeholder='your name' type='text' inputRef={name} />
             <TextField placeholder='your number' type='text' inputRef={number} />
             <TextField placeholder='password' type='text' inputRef={password} />
+            {!userExists && serverData !== null && <Alert severity="error">user not found!</Alert>}
             <Button variant='outlined' type='submit'>
-              log in
+              {authState === "login" ? "login" : "create a new account"}
+              <Link to={'/loading'}>
+              </Link>
             </Button>
           </FormGroup>
         </form>
