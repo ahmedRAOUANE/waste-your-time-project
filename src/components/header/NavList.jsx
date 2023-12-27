@@ -3,16 +3,11 @@ import { List, ListItem, ListItemButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { useDispatch } from 'react-redux';
-import { setAuthState } from "../../store/LoginSlice";
 
 const navbarLinks = ["login", "signup"]
 
 const NavList = ({ showState }) => {
     const dispatch = useDispatch();
-
-    const setAuthStateHandler = (state) => {
-        dispatch(setAuthState(state))
-    }
 
     return (
         <List
@@ -52,7 +47,7 @@ const NavList = ({ showState }) => {
                                 }
                             }}
                         >
-                            <Link to={`/${link}`} onClick={() => setAuthStateHandler(link)}>
+                            <Link to={`/${link}`}>
                                 <Typography sx={{
                                     "@media(max-width: 767px)": {
                                         color: 'black'

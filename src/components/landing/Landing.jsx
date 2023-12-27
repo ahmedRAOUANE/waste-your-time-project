@@ -1,16 +1,15 @@
 import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import LoginPage from '../../Pages/loginPage/LoginPage'
 import { useDispatch } from 'react-redux';
-import { setAuthState } from "../../store/LoginSlice";
+import Login from '../auth/Login';
 
 const Landing = () => {
 
   const dispatch = useDispatch();
 
   const authStateHandler = (state) => {
-    dispatch(setAuthState(state))
+    // dispatch(setAuthState(state))
   }
 
   return (
@@ -33,7 +32,7 @@ const Landing = () => {
                 }
               }}
             >
-              <Button variant='fill' onClick={() => authStateHandler("login")}
+              <Button variant='fill' 
                 sx={{
                   '@media(min-width: 768px)': {
                     display: 'none'
@@ -42,7 +41,7 @@ const Landing = () => {
               >
                 <Link to={'/login'}>login</Link>
               </Button>
-              <Button variant='fill' onClick={() => authStateHandler("signup")}>
+              <Button variant='fill' >
                 <Link to={'/signup'}>create new account</Link>
               </Button>
             </Box>
@@ -54,7 +53,7 @@ const Landing = () => {
               },
             }}
           >
-            <LoginPage />
+            <Login />
           </Grid>
         </Grid>
       </Container>
