@@ -1,16 +1,40 @@
-import { Box, Button, Container, Grid, Typography } from '@mui/material'
-import React from 'react'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
+import { auth } from "../../config/firebase";
+import { setUser } from "../../store/userSlice";
+import React, { useState, useEffect } from 'react';
+import { onAuthStateChanged } from "firebase/auth";
+import { setError, setIsLoading } from "../../store/loaderSlice";
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
+
+// components
 import Login from '../auth/Login';
+import Signup from '../auth/Signup';
+
 
 const Landing = () => {
+  const [currentPage, steCurrentPage] = useState("login");
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
+  useEffect(() => {
+    const userState = onAuthStateChanged(auth, (user) => {
+      console.log("user is: ", user);
+      try {
+        setIsLoading(true);
+        if (user) {
+          dispatch(setUser({ username: user.displayName, email: user.email }))
+        } else {
+          dispatch(setUser(null))
+        }
+      } catch (err) {
+        dispatch(setError(err.message));
+      } finally {
+        setIsLoading(false)
+      }
+    })
 
-  const authStateHandler = (state) => {
-    // dispatch(setAuthState(state))
-  }
+    // clean up when component unmount
+    return () => userState();
+  }, [dispatch])
 
   return (
     <Box mt={8}>
@@ -32,28 +56,16 @@ const Landing = () => {
                 }
               }}
             >
-              <Button variant='fill' 
-                sx={{
-                  '@media(min-width: 768px)': {
-                    display: 'none'
-                  }
-                }}
-              >
-                <Link to={'/login'}>login</Link>
-              </Button>
-              <Button variant='fill' >
-                <Link to={'/signup'}>create new account</Link>
+              <Button sx={{ display: { xs: "none", md: "flex" } }} variant='fill' onClick={() => steCurrentPage(prev => prev === "login" ? "signup" : "login")}>
+                {currentPage === "login" ? "create new account" : "login"}
               </Button>
             </Box>
           </Grid>
-          <Grid item xs={12} md={6}
-            sx={{
-              '@media(max-width: 767px)': {
-                display: 'none',
-              },
-            }}
-          >
-            <Login />
+          <Grid item xs={12} md={6}>
+            {currentPage === "login" ? (<Login />) : (<Signup />)}
+            <Button sx={{ display: { md: "none" }, margin: "auto" }} variant='fill' onClick={() => steCurrentPage(prev => prev === "login" ? "signup" : "login")}>
+              {currentPage === "login" ? "create new account" : "login"}
+            </Button>
           </Grid>
         </Grid>
       </Container>

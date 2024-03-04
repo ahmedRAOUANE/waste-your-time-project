@@ -1,23 +1,30 @@
 import React, { useState } from 'react';
 import { Box, Button, Container, FormGroup, TextField, Typography } from '@mui/material'
-import { useDispatch } from 'react-redux';
-
-import { useNavigate } from 'react-router-dom';
 
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase';
+import { setError, setIsLoading } from '../../store/loaderSlice';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/userSlice';
 
 const Login = () => {
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const submitDataHandler = (e) => {
+  const submitDataHandler = async (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password);
+    try {
+      dispatch(setIsLoading(true))
+      await signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          dispatch(setUser({ username: userCredential.user.displayName, email: userCredential.user.email }))
+        });
+    } catch (err) {
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setIsLoading(false));
+    }
   }
 
   return (
@@ -36,7 +43,6 @@ const Login = () => {
           >
             <TextField placeholder='your email' type='text' onChange={e => setEmail(e.target.value)} value={email} />
             <TextField placeholder='password' type='password' onChange={e => setPassword(e.target.value)} value={password} />
-            {/* {!userExists && serverData !== null && <Alert severity="error">user not found!</Alert>} */}
             <Button variant='outlined' type='submit'>
               login
             </Button>

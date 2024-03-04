@@ -1,27 +1,37 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { logoutUser } from '../../store/LoginSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { auth } from '../../config/firebase';
 import { signOut } from 'firebase/auth';
 import { Box, Typography } from '@mui/material';
+import { setUser } from '../../store/userSlice';
+import { setError, setIsLoading } from '../../store/loaderSlice';
 
 const HomePage = () => {
   const dispatch = useDispatch();
 
-  const userData = useSelector(state => state.login.userData)
+  const user = useSelector(state => state.userSlice.user)
 
   const logoutHandler = () => {
-    dispatch(logoutUser())
-    signOut(auth);
+    try {
+      dispatch(setIsLoading(true));
+      signOut(auth)
+        .then(() => {
+          dispatch(setUser(null))
+        });
+    } catch (err) {
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setIsLoading(false));
+    }
   }
 
   return (
     <div>
       HomePage
       <Box>
-        <Typography>username: {userData.username}</Typography>
-        <Typography>mail: {userData.email}</Typography>
-        <Typography>id: {userData.uid}</Typography>
+        <Typography>username: {user.username}</Typography>
+        <Typography>mail: {user.email}</Typography>
+        <Typography>id: {user.uid}</Typography>
       </Box>
       <button onClick={logoutHandler}>logout</button>
     </div>
