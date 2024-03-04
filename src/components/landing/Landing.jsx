@@ -15,9 +15,13 @@ const Landing = () => {
   const [currentPage, steCurrentPage] = useState("login");
   const dispatch = useDispatch()
 
+  const changeFormHandler = () => {
+    steCurrentPage(prev => prev === "login" ? "signup" : "login");
+    dispatch(setError(null));
+  }
+
   useEffect(() => {
     const userState = onAuthStateChanged(auth, (user) => {
-      console.log("user is: ", user);
       try {
         setIsLoading(true);
         if (user) {
@@ -56,14 +60,14 @@ const Landing = () => {
                 }
               }}
             >
-              <Button sx={{ display: { xs: "none", md: "flex" } }} variant='fill' onClick={() => steCurrentPage(prev => prev === "login" ? "signup" : "login")}>
+              <Button sx={{ display: { xs: "none", md: "flex" } }} variant='fill' onClick={changeFormHandler}>
                 {currentPage === "login" ? "create new account" : "login"}
               </Button>
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
             {currentPage === "login" ? (<Login />) : (<Signup />)}
-            <Button sx={{ display: { md: "none" }, margin: "auto" }} variant='fill' onClick={() => steCurrentPage(prev => prev === "login" ? "signup" : "login")}>
+            <Button sx={{ display: { md: "none" }, margin: "auto" }} variant='fill' onClick={changeFormHandler}>
               {currentPage === "login" ? "create new account" : "login"}
             </Button>
           </Grid>

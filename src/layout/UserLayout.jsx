@@ -1,12 +1,12 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { auth } from '../../config/firebase';
+import { auth } from '../config/firebase';
 import { signOut } from 'firebase/auth';
 import { Box, Typography } from '@mui/material';
-import { setUser } from '../../store/userSlice';
-import { setError, setIsLoading } from '../../store/loaderSlice';
+import { setUser } from '../store/userSlice';
+import { setError, setIsLoading } from '../store/loaderSlice';
 
-const HomePage = () => {
+const UserLayout = () => {
   const dispatch = useDispatch();
 
   const user = useSelector(state => state.userSlice.user)
@@ -27,7 +27,7 @@ const HomePage = () => {
 
   return (
     <div>
-      HomePage
+      UserLayout
       <Box>
         <Typography>username: {user.username}</Typography>
         <Typography>mail: {user.email}</Typography>
@@ -38,4 +38,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default UserLayout

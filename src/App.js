@@ -3,20 +3,22 @@ import { useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 
 // pages
-import LandingPage from "./Pages/landingPage/LandingPage";
-import HomePage from "./Pages/homePage/HomePage";
+import GuestLayout from "./layout/GuestLayout";
+import UserLayout from "./layout/UserLayout";
+import Loading from "./components/states/Loading";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
 
   return (
     <>
+      <Loading />
       <Routes>
-        {/* <Route path="/" element={<LandingPage />} /> */}
+        {/* <Route path="/" element={<GuestLayout />} /> */}
         {user ? (
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<UserLayout />} />
         ) : (
-          <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<GuestLayout />} />
         )}
       </Routes>
     </>
