@@ -4,13 +4,15 @@ import { Box, Button, Container, FormGroup, TextField, Typography } from '@mui/m
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../config/firebase';
 import { setError, setIsLoading } from '../../store/loaderSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/userSlice';
+import Error from '../states/Error';
 
 const Login = () => {
   const dispatch = useDispatch()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const error = useSelector(state => state.loaderSlice.error);
 
   const submitDataHandler = async (e) => {
     e.preventDefault();
@@ -36,11 +38,14 @@ const Login = () => {
             sx={{
               maxWidth: '500px',
               margin: 'auto',
-              height: '200px',
               display: 'flex',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              "&>div, &>button": {
+                mb: "10px"
+              }
             }}
           >
+            {error && (<Error message={error} />)}
             <TextField placeholder='your email' type='text' onChange={e => setEmail(e.target.value)} value={email} />
             <TextField placeholder='password' type='password' onChange={e => setPassword(e.target.value)} value={password} />
             <Button variant='outlined' type='submit'>

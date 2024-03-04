@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../../config/firebase'
 import { Box, Container, FormGroup, TextField, Typography, Button } from '@mui/material'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setError, setIsLoading } from '../../store/loaderSlice';
 import { setUser } from '../../store/userSlice';
+import Error from '../states/Error';
 
 
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const error = useSelector(state => state.loaderSlice.error);
 
     const dispatch = useDispatch();
 
@@ -49,6 +51,7 @@ const Signup = () => {
                             justifyContent: 'space-between'
                         }}
                 >
+                        {error && (<Error message={error} />)}
                         <TextField onChange={(e) => setUsername(e.target.value)} placeholder='your name' type='text' value={username} />
                         <TextField onChange={(e) => setEmail(e.target.value)} placeholder='your email' type='email' value={email} />
                         <TextField onChange={(e) => setPassword(e.target.value)} placeholder='password' type='password' value={password} />
