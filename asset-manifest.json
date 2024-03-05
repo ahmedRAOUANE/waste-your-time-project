@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/waste-your-time-project/static/css/main.88948b78.css",
+    "main.js": "/waste-your-time-project/static/js/main.a5a2ea0c.js",
+    "index.html": "/waste-your-time-project/index.html",
+    "main.88948b78.css.map": "/waste-your-time-project/static/css/main.88948b78.css.map",
+    "main.a5a2ea0c.js.map": "/waste-your-time-project/static/js/main.a5a2ea0c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88948b78.css",
+    "static/js/main.a5a2ea0c.js"
+  ]
+}
