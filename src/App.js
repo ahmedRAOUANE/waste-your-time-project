@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import GuestLayout from "./layout/GuestLayout";
 import UserLayout from "./layout/UserLayout";
 import Loading from "./components/states/Loading";
+import NotFound from "./components/states/NotFound";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
@@ -14,7 +15,7 @@ const App = () => {
     <>
       <Loading />
       <Routes>
-        {/* <Route path="/" element={<GuestLayout />} /> */}
+        <Route path="*" element={<NotFound />} />
         {user ? (
           <Route path="/" element={<UserLayout />} />
         ) : (
