@@ -26,9 +26,16 @@ const Signup = () => {
             // Create user
             await createUserWithEmailAndPassword(auth, email, password)
                 .then(userCredentials => {
-            // Update user profile
+                    // Update user profile
                     updateProfile(userCredentials.user, { displayName: username });
                     dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
+
+                    // create database for the new user
+                    setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
+                        uid: userCredentials.user.uid,
+                        displayName: username,
+                        email: userCredentials.user.email,
+                    });
                 })
 
         } catch (error) {
@@ -43,24 +50,22 @@ const Signup = () => {
             dispatch(setIsLoading(true));
 
             await signInWithPopup(auth, provider)
-                .then(user => {
-                    dispatch(setUser({ username: user.displayName, email: user.email }));
+                .then(userCredentials => {
+                    dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
 
                     // create database for the new user
-                    setDoc(doc(db, "usersProfile", user.uid), {
-                        displayName: user.displayName,
-                        email: user.email
+                    setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
+                        uid: userCredentials.user.uid,
+                        displayName: userCredentials.user.displayName,
+                        email: userCredentials.user.email,
+                        photoURL: userCredentials.user.photoURL,
                     });
                 })
         } catch (err) {
-            dispatch(setError(err.message))
+            dispatch(setError(err.message));
         } finally {
             dispatch(setIsLoading(false));
         }
-    }
-
-    const createDb = async (id) => {
-        await setDoc(doc(db, "users", id))
     }
 
     return (
