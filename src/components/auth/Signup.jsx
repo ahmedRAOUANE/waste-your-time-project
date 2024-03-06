@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from '../../config/firebase'
+import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
+import { auth, provider } from '../../config/firebase'
 import { Box, Container, FormGroup, TextField, Typography, Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { setError, setIsLoading } from '../../store/loaderSlice';
@@ -37,6 +37,21 @@ const Signup = () => {
         }
     }
 
+    const signupWithGoogle = async () => {
+        try {
+            dispatch(setIsLoading(true));
+
+            await signInWithPopup(auth, provider)
+                .then(user => {
+                    dispatch(setUser({ username: user.displayName, email: user.email }));
+                })
+        } catch (err) {
+            dispatch(setError(err.message))
+        } finally {
+            dispatch(setIsLoading(false));
+        }
+    }
+
     return (
         <Container sx={{ mt: '80px' }}>
             <Typography gutterBottom variant='h4' textAlign={'center'}>create new account</Typography>
@@ -57,6 +72,9 @@ const Signup = () => {
                         <TextField onChange={(e) => setPassword(e.target.value)} placeholder='password' type='password' value={password} />
                         <Button type='submit' variant='outlined' onClick={submitDataHandler}>
                             signup
+                        </Button>
+                        <Button variant='contained' color='error' onClick={signupWithGoogle}>
+                            Signup With Google
                         </Button>
                     </FormGroup>
                 </form>
