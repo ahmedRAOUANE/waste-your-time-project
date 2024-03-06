@@ -60,7 +60,7 @@ const ChatRoom = () => {
                 }}
             >
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    Grid
+                    selct a chat to start messaging
                 </Container>
             </Box>
         </Box>
