@@ -20,25 +20,25 @@ const Landing = () => {
     dispatch(setError(null));
   }
 
-  useEffect(() => {
-    const userState = onAuthStateChanged(auth, (user) => {
-      try {
-        setIsLoading(true);
-        if (user) {
-          dispatch(setUser({ username: user.displayName, email: user.email }))
-        } else {
-          dispatch(setUser(null))
-        }
-      } catch (err) {
-        dispatch(setError(err.message));
-      } finally {
-        setIsLoading(false)
-      }
-    })
+  // useEffect(() => {
+  //   const userState = onAuthStateChanged(auth, (user) => {
+  //     try {
+  //       setIsLoading(true);
+  //       if (user) {
+  //         dispatch(setUser({ username: user.displayName, email: user.email }))
+  //       } else {
+  //         dispatch(setUser(null))
+  //       }
+  //     } catch (err) {
+  //       dispatch(setError(err.message));
+  //     } finally {
+  //       setIsLoading(false)
+  //     }
+  //   })
 
-    // clean up when component unmount
-    return () => userState();
-  }, [dispatch])
+  //   // clean up when component unmount
+  //   return () => userState();
+  // }, [dispatch])
 
   return (
     <Box mt={8}>
