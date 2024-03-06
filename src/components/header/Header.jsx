@@ -61,7 +61,7 @@ function ResponsiveAppBar() {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="sticky" sx={{ top: 0, zIndex: 2000 }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
                     {/* small media */}
