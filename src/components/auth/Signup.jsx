@@ -53,17 +53,16 @@ const Signup = () => {
                 .then(userCredentials => {
                     dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
 
-                    console.log("user: ", userCredentials.user);
                     // create database for the new user
                     setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
                         uid: userCredentials.user.uid,
                         displayName: userCredentials.user.displayName,
                         email: userCredentials.user.email,
+                        photoURL: userCredentials.user.photoURL,
                     });
                 })
         } catch (err) {
-            dispatch(setError(err.message))
-            console.log("Error: ", err);
+            dispatch(setError(err.message));
         } finally {
             dispatch(setIsLoading(false));
         }
