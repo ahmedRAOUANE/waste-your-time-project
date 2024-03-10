@@ -1,6 +1,10 @@
-
+import { useEffect } from "react";
+import { auth, db } from "./config/firebase";
+import { setUser } from "./store/userSlice";
+import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { setError, setIsLoading } from "./store/loaderSlice";
 
 // layout
 import GuestLayout from "./layout/GuestLayout";
@@ -12,23 +16,28 @@ import NotFound from "./components/states/NotFound";
 import ChatRoom from "./pages/ChatRoom";
 import Home from "./pages/Home";
 import Rooms from "./pages/Rooms";
-import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./config/firebase";
-import { setUser } from "./store/userSlice";
-import { setError, setIsLoading } from "./store/loaderSlice";
+import Popup from "./components/helpers/Popup";
+import { doc, getDoc } from "firebase/firestore";
+import { setFriendList } from "./store/friendListSlice";
 
 const App = () => {
+
   const user = useSelector((state) => state.userSlice.user);
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const userState = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, async (user) => {
       dispatch(setIsLoading(true))
       try {
         if (user) {
-          dispatch(setUser({ username: user.displayName, email: user.email }))
+          dispatch(setUser({ uid: user.uid, username: user.displayName, email: user.email }));
+
+          // get users friendliset
+          const userFriendsDocRef = await doc(db, "usersFriends", user.uid);
+          const userDoc = await getDoc(userFriendsDocRef);
+
+          dispatch(setFriendList(userDoc.data()));
         } else {
           dispatch(setUser(null))
           navigate("waste-your-time-project/")
@@ -40,7 +49,7 @@ const App = () => {
       }
     })
 
-    return () => userState();
+    return () => unsub();
   }, [dispatch, navigate])
 
   return (
@@ -50,7 +59,7 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
         {user ? (
           <Route path="/waste-your-time-project/" element={<UserLayout />} >
-            <Route path="/waste-your-time-project/" element={<Home />} />
+            <Route index element={<Home />} />
             <Route path="/waste-your-time-project/chat" element={<ChatRoom />} />
             <Route path="/waste-your-time-project/rooms" element={<Rooms />} />
           </Route>
@@ -58,6 +67,7 @@ const App = () => {
             <Route path="/waste-your-time-project/" element={<GuestLayout />} />
         )}
       </Routes>
+      <Popup />
     </>
   );
 };

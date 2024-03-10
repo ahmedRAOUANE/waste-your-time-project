@@ -28,14 +28,17 @@ const Signup = () => {
                 .then(userCredentials => {
                     // Update user profile
                     updateProfile(userCredentials.user, { displayName: username });
-                    dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
+                    dispatch(setUser({ uid: userCredentials.user.uid, username: userCredentials.user.displayName, email: userCredentials.user.email, photoURL: userCredentials.user.photoURL }));
 
-                    // create database for the new user
+                    // create collections for the new user
+
                     setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
                         uid: userCredentials.user.uid,
                         displayName: username,
                         email: userCredentials.user.email,
                     });
+
+                    setDoc(doc(db, "usersFriends", userCredentials.user.uid), { friendsList: [] });
                 })
 
         } catch (error) {
@@ -51,7 +54,7 @@ const Signup = () => {
 
             await signInWithPopup(auth, provider)
                 .then(userCredentials => {
-                    dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
+                    dispatch(setUser({ uid: userCredentials.user.uid, username: userCredentials.user.displayName, email: userCredentials.user.email, photoURL: userCredentials.user.photoURL }));
 
                     // create database for the new user
                     setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
@@ -60,6 +63,7 @@ const Signup = () => {
                         email: userCredentials.user.email,
                         photoURL: userCredentials.user.photoURL,
                     });
+                    setDoc(doc(db, "usersFriends", userCredentials.user.uid), { friendsList: [] });
                 })
         } catch (err) {
             dispatch(setError(err.message));
