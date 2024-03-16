@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsOpen, setWindow } from '../store/modalSlice';
 import { Avatar, Box, Button, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from '@mui/material'
@@ -10,7 +10,7 @@ import Message from '../components/userLayout/Message';
 import { Search } from '@mui/icons-material';
 import InboxIcon from "@mui/icons-material/Inbox";
 import MailIcon from '@mui/icons-material/Mail';
-import { arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { setError } from '../store/loaderSlice';
 
@@ -20,7 +20,7 @@ const ChatRoom = () => {
     const [currentChat, setCurrentChat] = useState(null);
     const [user, setUser] = useState(null)
     const [message, setMessage] = useState("");
-    const [messageList, setMessageList] = useState(null);
+
     const dispatch = useDispatch();
 
     const changeCurrentChatHandler = async (index, freind) => {
@@ -39,8 +39,7 @@ const ChatRoom = () => {
         } catch (err) { console.log("Error: ", err); }
     }
 
-    // open search window
-    const handleSearch = () => {
+    const openSearchWindowHandler = () => {
         dispatch(setIsOpen(true));
         dispatch(setWindow("search"));
     }
@@ -57,10 +56,6 @@ const ChatRoom = () => {
 
         try {
             await updateDoc(doc(db, "chats", combinedID), { messages: arrayUnion(msgData) });
-
-            // get msg data after update 
-            const res = await getDoc(doc(db, "chats", combinedID));
-            setMessageList(res.data());
         } catch (err) {
             dispatch(setError(err.message));
             console.log("Error sending message: ", err);
@@ -68,24 +63,6 @@ const ChatRoom = () => {
 
         setMessage("");
     }
-
-    useEffect(() => {
-        const fetchMessages = async () => {
-            if (currentChat && user) {
-                const combinedID = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
-
-                try {
-                    onSnapshot(doc(db, "chats", combinedID), (doc) => {
-                        setMessageList(doc.data());
-                    });
-                } catch (err) {
-                    console.log("Error: ", err);
-                }
-            }
-        };
-
-        fetchMessages();
-    }, [currentChat, user, currentUser.uid]);
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -101,13 +78,13 @@ const ChatRoom = () => {
                 <Box sx={{ overflow: 'auto' }}>
                     <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", mt: 2 }}>
                         <Typography textAlign={"center"} variant='h4'>Chat Rooms</Typography>
-                        <IconButton onClick={handleSearch}>
+                        <IconButton onClick={openSearchWindowHandler}>
                             <Search />
                         </IconButton>
                     </Box>
                     <List>
                         {friendList ? (
-                            friendList.friendsList.map((friend, idx) => (
+                            friendList.map((friend, idx) => (
                                 <ListItem key={idx} disablePadding>
                                     <ListItemButton onClick={() => changeCurrentChatHandler(idx + 1, friend)}>
                                         <ListItemIcon>
@@ -161,11 +138,7 @@ const ChatRoom = () => {
                             <Typography variant='h4'>{user.displayName}</Typography>
                         </Grid>
                         <Grid item xs={12} sx={{ height: "70%", overflow: "scroll" }}>
-                            {messageList ? messageList.messages.map(message => (
-                                <Message message={message} />
-                            )) : (
-                                <div>you have no messages yet!</div>
-                            )}
+                            <Message user={user} />
                         </Grid>
                         <Grid item xs={12} sx={{ display: "flex", gap: "10px", height: "55px" }}>
                             <form style={{ flex: 1, gap: '10px', display: "flex" }} onSubmit={sendMessageHandler}>

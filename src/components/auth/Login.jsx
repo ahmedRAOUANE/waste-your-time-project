@@ -7,7 +7,7 @@ import { setError, setIsLoading } from '../../store/loaderSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../store/userSlice';
 import Error from '../states/Error';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -38,13 +38,25 @@ const Login = () => {
         .then(user => {
           dispatch(setUser({ uid: user.uid, username: user.displayName, email: user.email, photoURL: user.photoURL }));
 
+          const userDocRef = (coll) => doc(db, coll, user.uid)
+          const userProfileDoc = getDoc(userDocRef("usersProfile"));
+          const userFriendsDoc = getDoc(userDocRef("usersFriends"));
+          const userNotificationsDoc = getDoc(userDocRef("notifications"));
+
           // create collections for the new user
-          setDoc(doc(db, "usersProfile", user.uid), {
-            uid: user.uid,
-            displayName: user.displayName,
-            email: user.email,
-          });
-          setDoc(doc(db, "usersFriends", user.uid), { friendsList: [] });
+          if (!userProfileDoc.exists()) {
+            setDoc(userDocRef("usersProfile"), {
+              uid: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+            });
+          }
+          if (!userFriendsDoc.exists()) {
+            setDoc(getDoc(userDocRef("usersFriends")), { friendsList: [] });
+          }
+          if (!userNotificationsDoc.exists()) {
+            setDoc(getDoc(userDocRef("notifications")), { notificationList: [] });
+          }
         })
     } catch (err) {
       dispatch(setError(err.message))

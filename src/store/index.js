@@ -5,6 +5,7 @@ import loaderSlice from "./loaderSlice";
 import friendListSlice from "./friendListSlice";
 import searchSlice from "./searchSlice";
 import modalSlice from "./modalSlice";
+import notificationSlice from "./notificationSlice";
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     friendListSlice,
     searchSlice,
     modalSlice,
+    notificationSlice,
   },
 });
 

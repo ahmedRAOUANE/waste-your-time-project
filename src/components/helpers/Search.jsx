@@ -1,16 +1,17 @@
-import React, { useState } from 'react'
-import { Box, TextField, Button, ListItem, ListItemText, Avatar, ListItemIcon, ListItemButton, List, Paper } from '@mui/material';
-import { collection, query, where, getDocs, updateDoc, doc, arrayUnion } from "firebase/firestore";
+import React, { useState } from 'react';
 import { db } from "../../config/firebase";
-import { useDispatch, useSelector } from 'react-redux';
-import { setResult } from '../../store/searchSlice';
 import { setIsOpen } from '../../store/modalSlice';
-import { setFriendList } from '../../store/friendListSlice';
+import { setError } from '../../store/loaderSlice';
+import { setResult } from '../../store/searchSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHandleFreindRequest } from './useUpdateFreinds';
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { Box, TextField, Button, ListItem, ListItemText, Avatar, ListItemIcon, ListItemButton, List, Paper } from '@mui/material';
 
 const Search = () => {
     const result = useSelector(state => state.searchSlice.result);
-    const user = useSelector(state => state.userSlice.user);
     const [term, setTerm] = useState("");
+    const handleFreindRequest = useHandleFreindRequest();
 
     const dispatch = useDispatch();
 
@@ -31,18 +32,17 @@ const Search = () => {
                 dispatch(setResult(null));
             }
         } catch (err) {
-            console.log("Error: ", err);
             dispatch(setResult(null));
+            dispatch(setError(err.message));
         }
     }
 
     const addToFriendListHandler = async (selectedUser) => {
-        console.log("added!");
-        // add the selected user to users friendlist
-        const userFriendsDocRef = doc(db, "usersFriends", user.uid);
-        await updateDoc(userFriendsDocRef, { friendsList: arrayUnion(selectedUser) });
+        handleFreindRequest(selectedUser);
+
+        // remove the previous results and close window
+        dispatch(setResult(null));
         dispatch(setIsOpen(false));
-        // dispatch(setFriendList(selectedUser));
     }
 
     return (
@@ -63,12 +63,13 @@ const Search = () => {
                                     <Avatar alt="Remy Sharp" />
                                 </ListItemIcon>
                                 <ListItemText primary={friend.displayName} />
+                                <ListItemText primary={friend.email} />
                             </ListItemButton>
                         </ListItem>
                     ))
                 ) : (
                     <ListItem>
-                        make some friends first!
+                        search friends...
                     </ListItem>
                 )}
             </List>
@@ -76,4 +77,5 @@ const Search = () => {
     )
 }
 
-export default Search
+export default Search;
+
