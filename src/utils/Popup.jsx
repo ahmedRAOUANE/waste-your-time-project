@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Paper } from '@mui/material';
-import { setResult } from '../../store/searchSlice';
+import { setResult } from '../store/searchSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsOpen, setWindow } from '../../store/modalSlice';
+import { setIsOpen, setWindow } from '../store/modalSlice';
 
 // components 
 import Search from "./Search"

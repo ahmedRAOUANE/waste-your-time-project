@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../config/firebase';
+import { db } from '../config/firebase';
 
 const messageStyle = {
     padding: "10px", borderRadius: "20px", color: "white", mb: "10px", width: "fit-content", maxWidth: "50%"
@@ -50,7 +50,7 @@ const Message = ({ user }) => {
                     : (
                         <div>you have no messages yet!</div>
                     )
-            } 
+            }
         </>
     )
 }

@@ -1,7 +1,7 @@
-import { db } from "../../config/firebase";
-import { setError } from '../../store/loaderSlice';
+import { db } from "../config/firebase";
+import { setError } from '../store/loaderSlice';
 import { useDispatch, useSelector } from "react-redux";
-import { setFriendList } from "../../store/friendListSlice";
+import { setFriendList } from "../store/friendListSlice";
 import { arrayUnion, doc, getDoc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 
 export const useHandleFreindRequest = () => {

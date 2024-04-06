@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Box, Button, Container, FormGroup, TextField, Typography } from '@mui/material'
 
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, db, provider } from '../../config/firebase';
-import { setError, setIsLoading } from '../../store/loaderSlice';
+import { auth, db, provider } from '../config/firebase';
+import { setError, setIsLoading } from '../store/loaderSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../../store/userSlice';
-import Error from '../states/Error';
+import { setUser } from '../store/userSlice';
+import Error from './Error';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
@@ -38,24 +38,16 @@ const Login = () => {
         .then(user => {
           dispatch(setUser({ uid: user.uid, username: user.displayName, email: user.email, photoURL: user.photoURL }));
 
-          const userDocRef = (coll) => doc(db, coll, user.uid)
-          const userProfileDoc = getDoc(userDocRef("usersProfile"));
-          const userFriendsDoc = getDoc(userDocRef("usersFriends"));
-          const userNotificationsDoc = getDoc(userDocRef("notifications"));
+          const userDocRef = doc(db, "usersProfile", user.uid)
+          const userProfileDoc = getDoc(userDocRef);
 
           // create collections for the new user
           if (!userProfileDoc.exists()) {
-            setDoc(userDocRef("usersProfile"), {
+            setDoc(userDocRef, {
               uid: user.uid,
               displayName: user.displayName,
               email: user.email,
             });
-          }
-          if (!userFriendsDoc.exists()) {
-            setDoc(getDoc(userDocRef("usersFriends")), { friendsList: [] });
-          }
-          if (!userNotificationsDoc.exists()) {
-            setDoc(getDoc(userDocRef("notifications")), { notificationList: [] });
           }
         })
     } catch (err) {

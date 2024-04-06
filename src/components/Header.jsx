@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { signOut } from 'firebase/auth';
-import { setUser } from '../../store/userSlice';
-import { auth, db } from '../../config/firebase';
+import { auth } from '../config/firebase';
+import { setUser } from '../store/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { setIsOpen, setWindow } from '../../store/modalSlice';
-import { setError, setIsLoading } from '../../store/loaderSlice';
-import { setAllNotifications } from '../../store/notificationSlice';
+import { setIsOpen, setWindow } from '../store/modalSlice';
+import { setError, setIsLoading } from '../store/loaderSlice';
 
 import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Badge } from '@mui/material';
 

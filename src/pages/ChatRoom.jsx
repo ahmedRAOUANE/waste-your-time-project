@@ -4,7 +4,7 @@ import { setIsOpen, setWindow } from '../store/modalSlice';
 import { Avatar, Box, Button, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from '@mui/material'
 
 // components
-import Message from '../components/userLayout/Message';
+import Message from '../components/Message';
 
 // icons
 import { Search } from '@mui/icons-material';
@@ -13,6 +13,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { setError } from '../store/loaderSlice';
+import ListButton from '../components/ListButton';
 
 const ChatRoom = () => {
     const friendList = useSelector(state => state.friendListSlice.friendList);
@@ -85,14 +86,7 @@ const ChatRoom = () => {
                     <List>
                         {friendList ? (
                             friendList.map((friend, idx) => (
-                                <ListItem key={idx} disablePadding>
-                                    <ListItemButton onClick={() => changeCurrentChatHandler(idx + 1, friend)}>
-                                        <ListItemIcon>
-                                            <Avatar alt="Remy Sharp" />
-                                        </ListItemIcon>
-                                        <ListItemText primary={friend.displayName} />
-                                    </ListItemButton>
-                                </ListItem>
+                                <ListButton key={idx} onclick={() => changeCurrentChatHandler(idx + 1, friend)} ele={friend} onlyName />
                             ))
                         ) : (
                             <ListItem>
@@ -122,20 +116,16 @@ const ChatRoom = () => {
                         theme.palette.mode === 'light'
                             ? theme.palette.grey[100]
                             : theme.palette.grey[900],
-                    flexGrow: 1,
-                    height: "calc(100vh - 68px)",
+                    height: "calc(100vh - 70px)",
                 }}
             >
                 {currentChat ? (
                     <Grid container sx={{
-                        justifyContent: "space-between",
-                        height: "100%"
+                        height: "100%",
+                        marginTop: "10px"
                     }}>
                         <Grid item xs={12} sx={{ display: 'flex', alignItems: "center", height: "50px" }}>
-                            <IconButton sx={{ paddingLeft: 0 }}>
-                                <Avatar alt="Remy Sharp" />
-                            </IconButton>
-                            <Typography variant='h4'>{user.displayName}</Typography>
+                            <ListButton onlyName ele={user} style={{ flex: '1' }} />
                         </Grid>
                         <Grid item xs={12} sx={{ height: "70%", overflow: "scroll" }}>
                             <Message user={user} />

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
-import { auth, db, provider } from '../../config/firebase'
+import { auth, db, provider } from '../config/firebase'
 import { Box, Container, FormGroup, TextField, Typography, Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { setError, setIsLoading } from '../../store/loaderSlice';
-import { setUser } from '../../store/userSlice';
-import Error from '../states/Error';
+import { setError, setIsLoading } from '../store/loaderSlice';
+import { setUser } from '../store/userSlice';
+import Error from './Error';
 import { doc, getDoc, setDoc } from "firebase/firestore"
 
 
@@ -54,7 +54,7 @@ const Signup = () => {
     }
 
     const createCollections = (userCredentials) => {
-    // update the current user
+        // update the current user
         dispatch(setUser({ uid: userCredentials.user.uid, username: userCredentials.user.displayName, email: userCredentials.user.email, photoURL: userCredentials.user.photoURL }));
 
         const userDocRef = (coll) => doc(db, coll, userCredentials.user.uid)
@@ -91,7 +91,7 @@ const Signup = () => {
                             display: 'flex',
                             justifyContent: 'space-between'
                         }}
-                >
+                    >
                         {error && (<Error message={error} />)}
                         <TextField onChange={(e) => setUsername(e.target.value)} placeholder='your name' type='text' value={username} />
                         <TextField onChange={(e) => setEmail(e.target.value)} placeholder='your email' type='email' value={email} />

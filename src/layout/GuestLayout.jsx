@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import React from "react";
 
 // components
-import Header from '../components/header/Header';
-import Landing from '../components/guestLayout/Landing';
+import Header from '../components/Header';
+import Landing from '../pages/Landing';
 
 const GuestLayout = () => {
 
