@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
-import { auth, db, provider } from '../../config/firebase'
+import { auth, db, provider } from '../config/firebase'
 import { Box, Container, FormGroup, TextField, Typography, Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
-import { setError, setIsLoading } from '../../store/loaderSlice';
-import { setUser } from '../../store/userSlice';
-import Error from '../states/Error';
-import { doc, setDoc } from "firebase/firestore"
+import { setError, setIsLoading } from '../store/loaderSlice';
+import { setUser } from '../store/userSlice';
+import Error from './Error';
+import { doc, getDoc, setDoc } from "firebase/firestore"
 
 
 const Signup = () => {
@@ -28,14 +28,7 @@ const Signup = () => {
                 .then(userCredentials => {
                     // Update user profile
                     updateProfile(userCredentials.user, { displayName: username });
-                    dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
-
-                    // create database for the new user
-                    setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
-                        uid: userCredentials.user.uid,
-                        displayName: username,
-                        email: userCredentials.user.email,
-                    });
+                    createCollections(userCredentials);
                 })
 
         } catch (error) {
@@ -51,20 +44,37 @@ const Signup = () => {
 
             await signInWithPopup(auth, provider)
                 .then(userCredentials => {
-                    dispatch(setUser({ username: userCredentials.user.displayName, email: userCredentials.user.email }));
-
-                    // create database for the new user
-                    setDoc(doc(db, "usersProfile", userCredentials.user.uid), {
-                        uid: userCredentials.user.uid,
-                        displayName: userCredentials.user.displayName,
-                        email: userCredentials.user.email,
-                        photoURL: userCredentials.user.photoURL,
-                    });
+                    createCollections(userCredentials);
                 })
         } catch (err) {
             dispatch(setError(err.message));
         } finally {
             dispatch(setIsLoading(false));
+        }
+    }
+
+    const createCollections = (userCredentials) => {
+        // update the current user
+        dispatch(setUser({ uid: userCredentials.user.uid, username: userCredentials.user.displayName, email: userCredentials.user.email, photoURL: userCredentials.user.photoURL }));
+
+        const userDocRef = (coll) => doc(db, coll, userCredentials.user.uid)
+        const userProfileDoc = getDoc(userDocRef("usersProfile"));
+        const userFriendsDoc = getDoc(userDocRef("usersFriends"));
+        const userNotificationsDoc = getDoc(userDocRef("notifications"));
+
+        // create collections for the new user
+        if (!userProfileDoc.exists()) {
+            setDoc(userDocRef("usersProfile"), {
+                uid: userCredentials.user.uid,
+                displayName: userCredentials.user.displayName,
+                email: userCredentials.user.email,
+            });
+        }
+        if (!userFriendsDoc.exists()) {
+            setDoc(getDoc(userDocRef("usersFriends")), { friendsList: [] });
+        }
+        if (!userNotificationsDoc.exists()) {
+            setDoc(getDoc(userDocRef("notifications")), { notificationList: [] });
         }
     }
 
@@ -81,7 +91,7 @@ const Signup = () => {
                             display: 'flex',
                             justifyContent: 'space-between'
                         }}
-                >
+                    >
                         {error && (<Error message={error} />)}
                         <TextField onChange={(e) => setUsername(e.target.value)} placeholder='your name' type='text' value={username} />
                         <TextField onChange={(e) => setEmail(e.target.value)} placeholder='your email' type='email' value={email} />

@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setError, setIsLoading } from '../../store/loaderSlice';
-import { auth } from '../../config/firebase';
 import { signOut } from 'firebase/auth';
-import { setUser } from '../../store/userSlice';
+import { auth } from '../config/firebase';
+import { setUser } from '../store/userSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsOpen, setWindow } from '../store/modalSlice';
+import { setError, setIsLoading } from '../store/loaderSlice';
 
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem } from '@mui/material';
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, Avatar, Button, Tooltip, MenuItem, Badge } from '@mui/material';
 
 // icons
 import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useNavigate } from 'react-router-dom';
-
-const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
     const user = useSelector(state => state.userSlice.user);
+    const newNotifications = useSelector(state => state.notificationSlice.newNotifications);
+    const settings = ['Profile', "notifications", 'Logout'];
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -22,9 +23,13 @@ function ResponsiveAppBar() {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
-    const actionHandler = (action) => {
+    const actionHandler = async (action) => {
+        handleCloseUserMenu()
         if (action === "Logout") {
             logoutHandler()
+        } else if (action === "notifications") {
+            dispatch(setIsOpen(true))
+            dispatch(setWindow("notifications"))
         } else {
             navigate(`/${action}`);
         }
@@ -33,6 +38,7 @@ function ResponsiveAppBar() {
     const logoutHandler = () => {
         try {
             dispatch(setIsLoading(true));
+            dispatch(setError(null));
             signOut(auth)
                 .then(() => {
                     dispatch(setUser(null))
@@ -48,12 +54,12 @@ function ResponsiveAppBar() {
         setAnchorElNav(event.currentTarget);
     };
 
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
     const handleClosePage = () => {
         setAnchorElNav(null);
+    };
+
+    const handleOpenUserMenu = (event) => {
+        setAnchorElUser(event.currentTarget);
     };
 
     const handleCloseUserMenu = () => {
@@ -113,7 +119,7 @@ function ResponsiveAppBar() {
                             >
                                 {['home', 'chat', 'rooms'].map((page) => (
                                     <MenuItem key={page} onClick={handleClosePage}>
-                                        <Button><Link to={`/waste-your-time-project/${page === "home" ? "" : page}`}>{page}</Link></Button>
+                                        <Button><Link to={`/${page === "home" ? "" : page}`}>{page}</Link></Button>
                                     </MenuItem>
                                 ))}
                             </Menu>
@@ -146,7 +152,7 @@ function ResponsiveAppBar() {
                                     onClick={handleClosePage}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                 >
-                                    <Link to={`/waste-your-time-project/${page === "home" ? "" : page}`}>
+                                    <Link to={`/${page === "home" ? "" : page}`}>
                                         {page}
                                     </Link>
                                 </Button>
@@ -159,7 +165,13 @@ function ResponsiveAppBar() {
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title="Open settings">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src={user.image ? user.image : "A"} />
+                                    {newNotifications ? (
+                                        <Badge badgeContent={newNotifications.length} color="secondary" >
+                                            <Avatar alt="Remy Sharp" src={user.photoURL} />
+                                        </Badge>
+                                    ) : (
+                                        <Avatar alt="Remy Sharp" src={user.photoURL} />
+                                    )}
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -179,8 +191,8 @@ function ResponsiveAppBar() {
                                 onClose={handleCloseUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Button onClick={() => actionHandler(setting)}>{setting}</Button>
+                                    <MenuItem key={setting} onClick={() => actionHandler(setting)}>
+                                        {setting === "Profile" ? user.username : setting}
                                     </MenuItem>
                                 ))}
                             </Menu>

@@ -1,14 +1,12 @@
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from "../../config/firebase";
-import { setUser } from "../../store/userSlice";
-import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged } from "firebase/auth";
-import { setError, setIsLoading } from "../../store/loaderSlice";
+import { setError } from "../store/loaderSlice";
+
 import { Box, Button, Container, Grid, Typography } from '@mui/material';
 
 // components
-import Login from '../auth/Login';
-import Signup from '../auth/Signup';
+import Login from '../components/Login';
+import Signup from '../components/Signup';
 
 
 const Landing = () => {
@@ -20,26 +18,6 @@ const Landing = () => {
     dispatch(setError(null));
   }
 
-  // useEffect(() => {
-  //   const userState = onAuthStateChanged(auth, (user) => {
-  //     try {
-  //       setIsLoading(true);
-  //       if (user) {
-  //         dispatch(setUser({ username: user.displayName, email: user.email }))
-  //       } else {
-  //         dispatch(setUser(null))
-  //       }
-  //     } catch (err) {
-  //       dispatch(setError(err.message));
-  //     } finally {
-  //       setIsLoading(false)
-  //     }
-  //   })
-
-  //   // clean up when component unmount
-  //   return () => userState();
-  // }, [dispatch])
-
   return (
     <Box mt={8}>
       <Container>
@@ -47,7 +25,7 @@ const Landing = () => {
           <Grid item xs={12} md={6}>
             <Typography variant='h5' mt={12}>welcome to:</Typography>
             <Typography variant='h3' textAlign={'center'} gutterBottom>wast your time</Typography>
-            <Typography variant='h5' mt={6}>here where you can use your time effectively!</Typography>
+            <Typography variant='h5' mt={6}>here where you can manage your time effectively!</Typography>
             <Box
               mt={7}
               sx={{
