@@ -41,12 +41,13 @@ const Login = () => {
           const userDocRef = doc(db, "usersProfile", user.uid)
           const userProfileDoc = getDoc(userDocRef);
 
-          // create collections for the new user
+          // create doc for the new user
           if (!userProfileDoc.exists()) {
             setDoc(userDocRef, {
               uid: user.uid,
               displayName: user.displayName,
               email: user.email,
+              photoURL: user.photoURL,
             });
           }
         })

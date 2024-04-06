@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsOpen, setWindow } from '../store/modalSlice';
-import { Avatar, Box, Button, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from '@mui/material'
+import { Box, Button, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Toolbar, Typography } from '@mui/material'
 
 // components
 import Message from '../components/Message';
@@ -48,21 +48,23 @@ const ChatRoom = () => {
     const sendMessageHandler = async (e) => {
         e.preventDefault();
 
-        const msgData = {
-            msg: message,
-            owner: currentUser.uid,
+        if (message !== "") {
+            const msgData = {
+                msg: message,
+                owner: currentUser.uid,
+            }
+
+            const combinedID = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
+
+            try {
+                await updateDoc(doc(db, "chats", combinedID), { messages: arrayUnion(msgData) });
+            } catch (err) {
+                dispatch(setError(err.message));
+                console.log("Error sending message: ", err);
+            }
+
+            setMessage("");
         }
-
-        const combinedID = currentUser.uid > user.uid ? currentUser.uid + user.uid : user.uid + currentUser.uid;
-
-        try {
-            await updateDoc(doc(db, "chats", combinedID), { messages: arrayUnion(msgData) });
-        } catch (err) {
-            dispatch(setError(err.message));
-            console.log("Error sending message: ", err);
-        }
-
-        setMessage("");
     }
 
     return (
@@ -70,9 +72,9 @@ const ChatRoom = () => {
             <Drawer
                 variant="permanent"
                 sx={{
-                    width: 240,
+                    width: 300,
                     flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+                    [`& .MuiDrawer-paper`]: { width: 300, boxSizing: 'border-box' },
                 }}
             >
                 <Toolbar />
@@ -83,10 +85,10 @@ const ChatRoom = () => {
                             <Search />
                         </IconButton>
                     </Box>
-                    <List>
+                    <List sx={{ padding: '10px', }}>
                         {friendList ? (
                             friendList.map((friend, idx) => (
-                                <ListButton key={idx} onclick={() => changeCurrentChatHandler(idx + 1, friend)} ele={friend} onlyName />
+                                <ListButton style={{ marginBottom: '10px' }} key={idx} onclick={() => changeCurrentChatHandler(idx + 1, friend)} ele={friend} onlyName />
                             ))
                         ) : (
                             <ListItem>

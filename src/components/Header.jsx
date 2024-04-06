@@ -21,21 +21,21 @@ function ResponsiveAppBar() {
     const navigate = useNavigate();
 
     const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(false);
 
-    const actionHandler = async (action) => {
-        handleCloseUserMenu()
+    const handleAction = async (action) => {
+        handleOpenUserMenu()
         if (action === "Logout") {
-            logoutHandler()
+            handleLogout()
         } else if (action === "notifications") {
             dispatch(setIsOpen(true))
             dispatch(setWindow("notifications"))
         } else {
-            navigate(`/${action}`);
+            navigate(`/${action}/${user.uid}`);
         }
     }
 
-    const logoutHandler = () => {
+    const handleLogout = () => {
         try {
             dispatch(setIsLoading(true));
             dispatch(setError(null));
@@ -58,12 +58,8 @@ function ResponsiveAppBar() {
         setAnchorElNav(null);
     };
 
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const handleOpenUserMenu = () => {
+        setAnchorElUser(!anchorElUser);
     };
 
     return (
@@ -187,11 +183,11 @@ function ResponsiveAppBar() {
                                     vertical: 'top',
                                     horizontal: 'right',
                                 }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
+                                open={anchorElUser}
+                                onClose={handleOpenUserMenu}
                             >
                                 {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={() => actionHandler(setting)}>
+                                    <MenuItem key={setting} onClick={() => handleAction(setting)}>
                                         {setting === "Profile" ? user.username : setting}
                                     </MenuItem>
                                 ))}

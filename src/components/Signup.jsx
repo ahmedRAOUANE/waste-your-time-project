@@ -68,6 +68,7 @@ const Signup = () => {
                 uid: userCredentials.user.uid,
                 displayName: userCredentials.user.displayName,
                 email: userCredentials.user.email,
+                photoURL: userCredentials.user.photoURL
             });
         }
         if (!userFriendsDoc.exists()) {

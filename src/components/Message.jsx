@@ -37,12 +37,12 @@ const Message = ({ user }) => {
                     ? messageList.messages.map((message, idx) =>
                         message.owner === currentUser.uid
                             ? (
-                                <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}>
+                                <Box key={idx} sx={{ width: "100%", display: "flex", justifyContent: "flex-start" }}>
                                     <Typography sx={{ bgcolor: "#1976d2", ...messageStyle }}>{message.msg}</Typography>
                                 </Box>
                             )
                             : (
-                                <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+                                <Box key={idx} sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
                                     <Typography sx={{ bgcolor: "grey", ...messageStyle }}>{message.msg}</Typography>
                                 </Box>
                             )

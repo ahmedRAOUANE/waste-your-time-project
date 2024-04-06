@@ -20,6 +20,7 @@ import ChatRoom from "./pages/ChatRoom";
 import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
 import { setAllNotifications } from "./store/notificationSlice";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
@@ -38,6 +39,19 @@ const App = () => {
             email: user.email,
             photoURL: user.photoURL
           }));
+
+          // create a profile doc if not exists
+          const userProfileDocRef = doc(db, "usersProfile", user.uid)
+          const userProfileDoc = await getDoc(userProfileDocRef);
+
+          if (!userProfileDoc.exists()) {
+            setDoc(userProfileDocRef, {
+              uid: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL
+            });
+          }
 
           // get user freinds doc or create one if not exists
           generateDoc(user, "userFriends", setFriendList)
@@ -86,6 +100,7 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/chat" element={<ChatRoom />} />
             <Route path="/rooms" element={<Rooms />} />
+            <Route path="/profile/:uid" element={<Profile />} />
           </Route>
         ) : (
             <Route path="/" element={<GuestLayout />} />

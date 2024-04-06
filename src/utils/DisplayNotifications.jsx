@@ -6,7 +6,6 @@ import { Box, List, Typography } from '@mui/material';
 import ListButton from '../components/ListButton';
 
 const DisplayNotifications = () => {
-    const newNotifications = useSelector(state => state.notificationSlice.newNotifications);
     const allNotifications = useSelector(state => state.notificationSlice.allNotifications);
 
     const showMoreDetailesHandler = (UID) => {
@@ -20,7 +19,7 @@ const DisplayNotifications = () => {
                 {allNotifications &&
                     <List>
                         {allNotifications.map((notification, idx) => (
-                            <ListButton key={idx} onClick={showMoreDetailesHandler} ele={notification} />
+                            <ListButton style={{ marginBottom: '10px' }} key={idx} onClick={showMoreDetailesHandler} ele={notification} />
                         ))}
                     </List>
                 }
