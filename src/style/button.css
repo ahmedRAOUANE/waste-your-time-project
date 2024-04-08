@@ -1,0 +1,20 @@
+button,
+.btn {
+    padding: calc(var(--ligt-padding) / 2) var(--ligt-padding);
+    background-color: var(--light-color);
+    border-radius: 6px;
+    cursor: pointer;
+    color: inherit;
+    border: none;
+
+    &.danger {
+        background-color: red;
+        color: white;
+    }
+}
+
+.icon {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 5px;
+}

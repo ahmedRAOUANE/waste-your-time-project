@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { Box, Button, Container, FormGroup, TextField, Typography } from '@mui/material'
-
+import React, { useRef } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, db, provider } from '../config/firebase';
 import { setError, setIsLoading } from '../store/loaderSlice';
@@ -11,15 +9,22 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
   const dispatch = useDispatch()
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const error = useSelector(state => state.loaderSlice.error);
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   const submitDataHandler = async (e) => {
     e.preventDefault();
+
+    const userCredentials = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    }
+
     try {
       dispatch(setIsLoading(true))
-      await signInWithEmailAndPassword(auth, email, password)
+      await signInWithEmailAndPassword(auth, userCredentials.email, userCredentials.password)
         .then(userCredential => {
           dispatch(setUser({ uid: userCredential.user.uid, username: userCredential.user.displayName, email: userCredential.user.email, photoURL: userCredential.user.photoURL }))
         });
@@ -41,12 +46,13 @@ const Login = () => {
           const userDocRef = doc(db, "usersProfile", user.uid)
           const userProfileDoc = getDoc(userDocRef);
 
-          // create collections for the new user
+          // create doc for the new user
           if (!userProfileDoc.exists()) {
             setDoc(userDocRef, {
               uid: user.uid,
               displayName: user.displayName,
               email: user.email,
+              photoURL: user.photoURL,
             });
           }
         })
@@ -59,34 +65,16 @@ const Login = () => {
   }
 
   return (
-    <Container sx={{ mt: '80px' }}>
-      <Typography gutterBottom variant='h4' textAlign={'center'}>login</Typography>
-      <Box>
-        <form onSubmit={submitDataHandler}>
-          <FormGroup
-            sx={{
-              maxWidth: '500px',
-              margin: 'auto',
-              display: 'flex',
-              justifyContent: 'space-between',
-              "&>div, &>button": {
-                mb: "10px"
-              }
-            }}
-          >
-            {error && (<Error message={error} />)}
-            <TextField placeholder='your email' type='text' onChange={e => setEmail(e.target.value)} value={email} />
-            <TextField placeholder='password' type='password' onChange={e => setPassword(e.target.value)} value={password} />
-            <Button variant='outlined' type='submit'>
-              login
-            </Button>
-            <Button variant='contained' color='error' onClick={signupWithGoogle}>
-              Login With Google
-            </Button>
-          </FormGroup>
-        </form>
-      </Box>
-    </Container>
+    <div className="form-container">
+      <h3 className='text-center'>Login</h3>
+      <form className='box column' onSubmit={submitDataHandler}>
+        {error && (<Error message={error} />)}
+        <div><input ref={emailRef} type="email" /></div>
+        <div><input ref={passwordRef} type="password" /></div>
+        <button type="submit">Login</button>
+        <button className='danger' onClick={signupWithGoogle}>Login with Google</button>
+      </form>
+    </div>
   )
 }
 

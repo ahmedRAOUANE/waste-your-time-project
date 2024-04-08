@@ -1,33 +1,38 @@
-import React, { useState } from 'react';
-import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
-import { auth, db, provider } from '../config/firebase'
-import { Box, Container, FormGroup, TextField, Typography, Button } from '@mui/material'
-import { useDispatch, useSelector } from 'react-redux';
-import { setError, setIsLoading } from '../store/loaderSlice';
-import { setUser } from '../store/userSlice';
 import Error from './Error';
-import { doc, getDoc, setDoc } from "firebase/firestore"
-
+import React, { useRef } from 'react';
+import { setUser } from '../store/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { auth, db, provider } from '../config/firebase';
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { setError, setIsLoading } from '../store/loaderSlice';
+import { createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const error = useSelector(state => state.loaderSlice.error);
+
+    const emailRef = useRef()
+    const usernameRef = useRef()
+    const passwordRef = useRef()
 
     const dispatch = useDispatch();
 
     const submitDataHandler = async (e) => {
         e.preventDefault();
 
+        const userCredentials = {
+            email: emailRef.current.value,
+            username: usernameRef.current.value,
+            password: passwordRef.current.value,
+        }
+
         try {
             dispatch(setIsLoading(true))
 
             // Create user
-            await createUserWithEmailAndPassword(auth, email, password)
+            await createUserWithEmailAndPassword(auth, userCredentials.email, userCredentials.password)
                 .then(userCredentials => {
                     // Update user profile
-                    updateProfile(userCredentials.user, { displayName: username });
+                    updateProfile(userCredentials.user, { displayName: userCredentials.username });
                     createCollections(userCredentials);
                 })
 
@@ -68,6 +73,7 @@ const Signup = () => {
                 uid: userCredentials.user.uid,
                 displayName: userCredentials.user.displayName,
                 email: userCredentials.user.email,
+                photoURL: userCredentials.user.photoURL
             });
         }
         if (!userFriendsDoc.exists()) {
@@ -79,34 +85,18 @@ const Signup = () => {
     }
 
     return (
-        <Container sx={{ mt: '80px' }}>
-            <Typography gutterBottom variant='h4' textAlign={'center'}>create new account</Typography>
-            <Box>
-                <form>
-                    <FormGroup
-                        sx={{
-                            maxWidth: '500px',
-                            margin: 'auto',
-                            height: '300px',
-                            display: 'flex',
-                            justifyContent: 'space-between'
-                        }}
-                    >
-                        {error && (<Error message={error} />)}
-                        <TextField onChange={(e) => setUsername(e.target.value)} placeholder='your name' type='text' value={username} />
-                        <TextField onChange={(e) => setEmail(e.target.value)} placeholder='your email' type='email' value={email} />
-                        <TextField onChange={(e) => setPassword(e.target.value)} placeholder='password' type='password' value={password} />
-                        <Button type='submit' variant='outlined' onClick={submitDataHandler}>
-                            signup
-                        </Button>
-                        <Button variant='contained' color='error' onClick={signupWithGoogle}>
-                            Signup With Google
-                        </Button>
-                    </FormGroup>
-                </form>
-            </Box>
-        </Container>
+        <div className="form-container">
+            <h3 className='text-center'>Signup</h3>
+            <form className='box column' onSubmit={submitDataHandler}>
+                {error && (<Error message={error} />)}
+                <div><input ref={emailRef} type="email" /></div>
+                <div><input ref={usernameRef} type="text" /></div>
+                <div><input ref={passwordRef} type="password" /></div>
+                <button type="submit">Signup</button>
+                <button className='danger' onClick={signupWithGoogle}>Signup with Google</button>
+            </form>
+        </div>
     )
 }
 
-export default Signup
+export default Signup;

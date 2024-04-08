@@ -9,49 +9,55 @@ const ListButton = ({ ele, onclick, key, onlyName, style }) => {
     const user = useSelector(state => state.userSlice.user);
 
     const handleFreindRequest = async (status) => {
-
         if (status === "accepted") {
             // add sender to receiver freind list 
-            const senderProfileDocRef = doc(db, "usersProfile", ele.senderUID);
-            const senderProfileDoc = await getDoc(senderProfileDocRef);
-
-            if (senderProfileDoc.exists()) {
-                const senderDocRef = doc(db, "userFriends", user.uid);
-                const senderDoc = await getDoc(senderDocRef);
-
-                if (senderDoc.exists()) {
-                    console.log("profile doc data: ", senderProfileDoc.data())
-                    await updateDoc(senderDocRef, {
-                        userFriends: arrayUnion(senderProfileDoc.data())
-                    })
-                } else {
-                    await setDoc(senderDoc, {
-                        userFriends: arrayUnion(senderProfileDoc.data())
-                    })
-                }
-            }
+            addToFreindlist(user.uid, ele.senderUID)
 
             // add receiver to sender freind list
-            const receiverProfileDocRef = doc(db, "usersProfile", user.uid);
-            const receiverProfileDoc = await getDoc(receiverProfileDocRef);
+            addToFreindlist(ele.senderUID, user.uid)
 
-            if (receiverProfileDoc.exists()) {
-                const senderDocRef = doc(db, "userFriends", ele.senderUID);
-                const senderDoc = await getDoc(senderDocRef);
-
-                if (senderDoc.exists()) {
-                    console.log("profile doc data: ", receiverProfileDoc.data())
-                    await updateDoc(senderDocRef, {
-                        userFriends: arrayUnion(receiverProfileDoc.data())
-                    })
-                } else {
-                    await setDoc(senderDoc, {
-                        userFriends: arrayUnion(receiverProfileDoc.data())
-                    })
-                }
-            }
+            // then delete the notification
+            deleteNotification(ele)
         } else if (status === "rejected") {
             // then delete the notification
+            deleteNotification(ele)
+        }
+    }
+
+    const addToFreindlist = async (user1, user2) => {
+        const receiverProfileDocRef = doc(db, "usersProfile", user1);
+        const receiverProfileDoc = await getDoc(receiverProfileDocRef);
+
+        if (receiverProfileDoc.exists()) {
+            const senderDocRef = doc(db, "userFriends", user2);
+            const senderDoc = await getDoc(senderDocRef);
+
+            if (senderDoc.exists()) {
+                console.log("profile doc data: ", receiverProfileDoc.data())
+                await updateDoc(senderDocRef, {
+                    userFriends: arrayUnion(receiverProfileDoc.data())
+                })
+            } else {
+                await setDoc(senderDoc, {
+                    userFriends: arrayUnion(receiverProfileDoc.data())
+                })
+            }
+        }
+    }
+
+    const deleteNotification = async (ele) => {
+        const notiDocRef = doc(db, "notifications", user.uid);
+        const notiDoc = await getDoc(notiDocRef);
+
+        if (notiDoc.exists()) {
+            const notificationList = notiDoc.data().notifications;
+            const target = notificationList.find(noti => noti.senderUID === ele.senderUID);
+
+            const filteredNotifications = notificationList.filter(ele => ele.senderUID !== target.senderUID);
+
+            await updateDoc(notiDocRef, {
+                notifications: filteredNotifications
+            });
         }
     }
 

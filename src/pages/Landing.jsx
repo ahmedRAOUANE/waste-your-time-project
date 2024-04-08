@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setError } from "../store/loaderSlice";
 
-import { Box, Button, Container, Grid, Typography } from '@mui/material';
+// styles
 
 // components
 import Login from '../components/Login';
 import Signup from '../components/Signup';
+import { storage } from '../config/firebase';
+import { getDownloadURL, ref } from 'firebase/storage';
 
 
 const Landing = () => {
   const [currentPage, steCurrentPage] = useState("login");
+  const [bgI, setBgI] = useState('');
   const dispatch = useDispatch()
 
   const changeFormHandler = () => {
@@ -18,40 +21,53 @@ const Landing = () => {
     dispatch(setError(null));
   }
 
+  useEffect(() => {
+    const pathRef = ref(storage, "assets/LandingPageBackground.png");
+    getDownloadURL(pathRef).then((res) => {
+      setBgI(res);
+    })
+  }, [])
+
   return (
-    <Box mt={8}>
-      <Container>
-        <Grid container>
-          <Grid item xs={12} md={6}>
-            <Typography variant='h5' mt={12}>welcome to:</Typography>
-            <Typography variant='h3' textAlign={'center'} gutterBottom>wast your time</Typography>
-            <Typography variant='h5' mt={6}>here where you can manage your time effectively!</Typography>
-            <Box
-              mt={7}
-              sx={{
-                display: "flex",
-                alignItems: 'center',
-                justifyContent: 'center',
-                '@media(max-width: 424px)': {
-                  flexDirection: 'column',
-                  padding: '10px'
-                }
-              }}
-            >
-              <Button sx={{ display: { xs: "none", md: "flex" } }} variant='fill' onClick={changeFormHandler}>
-                {currentPage === "login" ? "create new account" : "login"}
-              </Button>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            {currentPage === "login" ? (<Login />) : (<Signup />)}
-            <Button sx={{ display: { md: "none" }, margin: "auto" }} variant='fill' onClick={changeFormHandler}>
-              {currentPage === "login" ? "create new account" : "login"}
-            </Button>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+    <div className='landing box center-x center-y'>
+      {/* background */}
+      <img src={bgI} alt="" srcset="" className='cover-bg' />
+
+      {/* content */}
+      <div className="box cover-content container">
+        <div className="box full-width">
+          <div className="text-container box column">
+            <div>
+              <h2 className='title text-center text-md-start'>Waste Your Time</h2>
+              <h3 className='text-center text-md-start'>here where you can manage your time effectively!</h3>
+            </div>
+          </div>
+          <div className="transparent box column">
+            {currentPage === "login" ? (
+              <>
+                <Login />
+                <div className='box'>
+                  Don't Have An Accout?,
+                  <button className='icon' onClick={changeFormHandler}>
+                    Create New Account
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Signup />
+                <div>
+                  Allready Have An Accout?,
+                  <button className='icon' onClick={changeFormHandler}>
+                    Login
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

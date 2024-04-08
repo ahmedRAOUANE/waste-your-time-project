@@ -43,7 +43,7 @@ const Search = () => {
         const request = {
             senderUID: user.uid,
             senderPhoto: selectedUser.photoURL || null,
-            content: `${user.displayName} send's you a freind request`,
+            content: `${user.username} send's you a freind request`,
             status: "",
             seen: false,
             type: "freind_request"
@@ -76,7 +76,7 @@ const Search = () => {
             {results ? (
                 <List>
                     {results.map((freind, idx) => (
-                        <ListButton key={idx} ele={freind} onclick={() => handleFreindRequest(freind)} />
+                        <ListButton style={{ marginBottom: '10px' }} key={idx} ele={freind} onclick={() => handleFreindRequest(freind)} />
                     ))}
                 </List>
             ) : (
