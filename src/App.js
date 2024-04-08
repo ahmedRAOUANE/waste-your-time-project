@@ -10,7 +10,11 @@ import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 
 // layout
 import UserLayout from "./layout/UserLayout";
-import GuestLayout from "./layout/GuestLayout";
+
+// styles
+import "./style/index.css";
+import "./style/layout.css";
+import "./style/button.css";
 
 // pages
 import Home from "./pages/Home";
@@ -21,6 +25,7 @@ import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
 import { setAllNotifications } from "./store/notificationSlice";
 import Profile from "./pages/Profile";
+import Landing from "./pages/Landing";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
@@ -98,12 +103,12 @@ const App = () => {
         {user ? (
           <Route path="/" element={<UserLayout />} >
             <Route index element={<Home />} />
-            <Route path="/chat" element={<ChatRoom />} />
             <Route path="/rooms" element={<Rooms />} />
+            <Route path="/chat" element={<ChatRoom />} />
             <Route path="/profile/:uid" element={<Profile />} />
           </Route>
         ) : (
-            <Route path="/" element={<GuestLayout />} />
+            <Route index element={<Landing />} />
         )}
       </Routes>
       <Popup />
