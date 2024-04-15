@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/waste-your-time-project/static/css/main.439d764c.css",
-    "main.js": "/waste-your-time-project/static/js/main.f1f7151b.js",
+    "main.js": "/waste-your-time-project/static/js/main.48a1c50d.js",
     "index.html": "/waste-your-time-project/index.html",
     "main.439d764c.css.map": "/waste-your-time-project/static/css/main.439d764c.css.map",
-    "main.f1f7151b.js.map": "/waste-your-time-project/static/js/main.f1f7151b.js.map"
+    "main.48a1c50d.js.map": "/waste-your-time-project/static/js/main.48a1c50d.js.map"
   },
   "entrypoints": [
     "static/css/main.439d764c.css",
-    "static/js/main.f1f7151b.js"
+    "static/js/main.48a1c50d.js"
   ]
 }
