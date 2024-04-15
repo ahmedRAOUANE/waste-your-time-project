@@ -5,12 +5,14 @@ import { setError } from '../store/loaderSlice';
 import { setResult } from '../store/searchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-import { Box, TextField, Button, Paper, List, Typography } from '@mui/material';
+
+// icons
+import { Search } from '@mui/icons-material';
 
 // components
 import ListButton from '../components/ListButton';
 
-const Search = () => {
+const SearchWindow = () => {
     const user = useSelector(state => state.userSlice.user);
     const results = useSelector(state => state.searchSlice.result);
     const [term, setTerm] = useState("");
@@ -65,26 +67,26 @@ const Search = () => {
     }
 
     return (
-        <Box>
-            <Paper>
-                <form style={{ flex: 1, gap: '10px', display: "flex" }} onSubmit={searchHandler}>
-                    <TextField onChange={(e) => setTerm(e.target.value)} type="search" placeholder="search friend" sx={{ flex: 1 }} />
-                    <Button variant='contained' type='submit'>search</Button>
-                </form>
-            </Paper>
+        <>
+            <form onSubmit={searchHandler} className="search-input transparent box disable-Guitters">
+                <input onChange={(e) => setTerm(e.target.value)} autoFocus type="search" name="search" id="search" placeholder='Search..' />
+                <button type='submit' className='icon box center-x center-y'><Search /></button>
+            </form>
 
             {results ? (
-                <List>
+                <ul>
                     {results.map((freind, idx) => (
                         <ListButton style={{ marginBottom: '10px' }} key={idx} ele={freind} onclick={() => handleFreindRequest(freind)} />
                     ))}
-                </List>
+                </ul>
             ) : (
-                <Typography>search freinds</Typography>
+                <div className="search-msg box center-x center-y">
+                    <h4 className='text-center'>search freinds..</h4>
+                </div>
             )}
-        </Box>
+        </>
     )
 }
 
-export default Search;
+export default SearchWindow;
 

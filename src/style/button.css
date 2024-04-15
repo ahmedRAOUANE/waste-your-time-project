@@ -11,6 +11,10 @@ button,
         background-color: red;
         color: white;
     }
+    &accept {
+        background-color: green;
+        color: white;
+    }
 }
 
 .icon {

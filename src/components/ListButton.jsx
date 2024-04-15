@@ -1,9 +1,10 @@
 import React from 'react';
-
-import { ListItem, ListItemText, Avatar, ListItemIcon, ListItemButton, Paper, Box, Button } from '@mui/material'
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { useSelector } from 'react-redux';
+import AvatarImg from './AvatarImg';
+
+import "../style/listButton.css";
 
 const ListButton = ({ ele, onclick, key, onlyName, style }) => {
     const user = useSelector(state => state.userSlice.user);
@@ -62,39 +63,26 @@ const ListButton = ({ ele, onclick, key, onlyName, style }) => {
     }
 
     return (
-        <Paper key={key} style={style}>
-            <ListItem disablePadding>
-                <ListItemButton onClick={onclick}>
-                    <ListItemIcon>
-                        <Avatar src={ele.photoURL !== null ? ele.photoURL : ""} alt="Remy Sharp" />
-                    </ListItemIcon>
-                    {ele && (
-                        <>
-                            {onlyName ? (
-                                <ListItemText primary={ele.displayName} />
-                            ) : (
-                                <>
-                                    <ListItemText primary={ele.displayName} />
-                                    <ListItemText primary={ele.email} />
-                                </>
-                            )}
-                        </>
-                    )}
-                    {
-                        ele.content && (
-                            <>
-                                <ListItemText primary={ele.content} />
-                                <Box sx={{ display: "flex", gap: '10px', flexWrap: "no-wrap" }}>
-                                    <Button onClick={() => handleFreindRequest("accepted")} variant='contained' color='primary'>Accept</Button>
-                                    <Button onClick={() => handleFreindRequest("rejected")} variant='contained' color='error'>Reject</Button>
-                                </Box>
-                            </>
-                        )
-                    }
-                </ListItemButton>
-            </ListItem>
-        </Paper>
+        <li className='list-button btn transparent nowrap' onClick={onclick}>
+            <div className="box user-info">
+                <AvatarImg photoURL={ele.photoURL !== null ? ele.photoURL : ""} />
+                {ele.displayName && (
+                    <h3 className="disable-Guitters">{ele.displayName}</h3>
+                )}
+            </div>
+            {
+                ele.content && (
+                    <div>
+                        <p>{ele.content}</p>
+                        <div className='box'>
+                            <button className='accept' onClick={() => handleFreindRequest("accepted")}>Accept</button>
+                            <button className='reject' onClick={() => handleFreindRequest("rejected")}>Reject</button>
+                        </div>
+                    </div>
+                )
+            }
+        </li>
     )
 }
 
-export default ListButton
+export default ListButton;
