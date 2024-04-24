@@ -1,0 +1,58 @@
+aside {
+    margin: 0;
+    color: white;
+    height: calc(100vh - 136px);
+
+    @media (min-width: 768px) {
+        height: calc(100vh - 100px);
+    }
+
+    .title {
+        font-weight: 400;
+        letter-spacing: 3px;
+    }
+
+    .chats {
+        width: 100%;
+        flex: 1;
+        overflow: scroll;
+    }
+
+    .more-options {
+        padding: 10px;
+
+        ul {
+            gap: 10px;
+
+            li {
+                padding: 10px;
+                gap: 10px;
+            }
+        }
+
+        .btn {
+            background-color: var(--main-color);
+        }
+    }
+}
+
+main {
+    color: white;
+    flex: 1;
+    height: calc(100vh - 136px);
+
+    @media (min-width: 768px) {
+        height: calc(100vh - 100px);
+    }
+
+    .chat-body {
+        overflow: scroll;
+    }
+
+    form {
+        button {
+            font-size: 20px;
+            padding: 10px !important;
+        }
+    }
+}

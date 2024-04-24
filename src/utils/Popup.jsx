@@ -5,25 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setIsOpen, setWindow } from '../store/modalSlice';
 
 // components 
-import Search from "./Search"
+import SearchWindow from "./SearchWindow"
 import DisplayNotifications from './DisplayNotifications';
 
-const style = {
-    top: "50%",
-    left: "50%",
-    width: "60%",
-    height: "60%",
-    margin: "auto",
-    maxWidth: "80%",
-    padding: "20px",
-    bgColor: "white",
-    position: "absolute",
-    transform: "translate(-50%, -50%)",
-    overflow: "scroll",
-}
+import "../style/modal.css";
+import UserMenu from './UserMenu';
 
 const Popup = () => {
-    const open = useSelector(state => state.modalSlice.isOpen);
+    const isOpen = useSelector(state => state.modalSlice.isOpen);
     const window = useSelector(state => state.modalSlice.window);
 
     const dispatch = useDispatch();
@@ -34,17 +23,20 @@ const Popup = () => {
         dispatch(setResult(null));
     }
 
-    return (
-        <Modal open={open} onClose={handleClose}>
-            <Paper sx={{ ...style }}>
+    return isOpen && (
+        <div className={`overlay box ${window}-container`} onClick={handleClose}>
+            <div className={`${window} transparent`} onClick={(e) => e.stopPropagation()}>
                 {window === "search" && (
-                    <Search />
+                    <SearchWindow />
                 )}
                 {window === "notifications" && (
                     <DisplayNotifications />
                 )}
-            </Paper>
-        </Modal>
+                {window === "userMenu" && (
+                    <UserMenu />
+                )}
+            </div>
+        </div>
     )
 }
 

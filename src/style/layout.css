@@ -17,7 +17,9 @@
     flex-wrap: wrap;
     gap: 20px;
 }
-
+.nowrap {
+    flex-wrap: nowrap !important;
+}
 .column {
     flex-direction: column;
 }
@@ -32,8 +34,7 @@
 
 .transparent {
     margin: auto;
-    padding: 10px;
-    max-width: 350px;
+    padding: 20px;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     background-color: #ffffff4a;
@@ -68,6 +69,27 @@
     }
 }
 
+.hide-in-small {
+    display: none;
+
+    @media (min-width: 768px) {
+        display: flex;
+    }
+}
+
+.hide-in-large {
+    display: flex;
+
+    @media (min-width: 768px) {
+        display: none;
+    }
+}
+
+.disable-Guitters {
+    margin: 0;
+    padding: 0;
+    box-shadow: var(--out-line);
+}
 .landing {
     width: 100%;
     height: 100vh;

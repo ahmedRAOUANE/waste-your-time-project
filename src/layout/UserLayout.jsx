@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const UserLayout = () => {
   return (
-    <div>
+    <div className='box column'>
       <Header />
       <Outlet />
     </div>

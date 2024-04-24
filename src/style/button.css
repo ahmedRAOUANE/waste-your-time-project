@@ -1,6 +1,6 @@
 button,
 .btn {
-    padding: calc(var(--ligt-padding) / 2) var(--ligt-padding);
+    padding: calc(var(--main-padding) / 2) var(--ligt-padding);
     background-color: var(--light-color);
     border-radius: 6px;
     cursor: pointer;
@@ -9,6 +9,10 @@ button,
 
     &.danger {
         background-color: red;
+        color: white;
+    }
+        &.accept {
+        background-color: green;
         color: white;
     }
 }

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFriendList } from "./store/friendListSlice";
 import { setError, setIsLoading } from "./store/loaderSlice";
 import { Route, Routes, useNavigate } from "react-router-dom";
+import { setAllNotifications } from "./store/notificationSlice";
 import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 
 // layout
@@ -23,7 +24,6 @@ import Popup from "./utils/Popup";
 import ChatRoom from "./pages/ChatRoom";
 import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
-import { setAllNotifications } from "./store/notificationSlice";
 import Profile from "./pages/Profile";
 import Landing from "./pages/Landing";
 

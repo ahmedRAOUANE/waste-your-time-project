@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setError } from "../store/loaderSlice";
-
-// styles
+import React, { useEffect, useState } from 'react';
 
 // components
 import Login from '../components/Login';
@@ -10,10 +8,10 @@ import Signup from '../components/Signup';
 import { storage } from '../config/firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
 
-
 const Landing = () => {
   const [currentPage, steCurrentPage] = useState("login");
   const [bgI, setBgI] = useState('');
+
   const dispatch = useDispatch()
 
   const changeFormHandler = () => {
