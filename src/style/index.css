@@ -79,6 +79,8 @@ input {
     padding: var(--light-padding);
     border-radius: 6px;
     border: none;
+    font-size: 20px;
+    color: inherit;
 }
 ul,
 li {

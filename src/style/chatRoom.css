@@ -1,7 +1,11 @@
 aside {
     margin: 0;
-    height: calc(100vh - 100px);
     color: white;
+    height: calc(100vh - 136px);
+
+    @media (min-width: 768px) {
+        height: calc(100vh - 100px);
+    }
 
     .title {
         font-weight: 400;
@@ -35,10 +39,20 @@ aside {
 main {
     color: white;
     flex: 1;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 136px);
+
+    @media (min-width: 768px) {
+        height: calc(100vh - 100px);
+    }
 
     .chat-body {
         overflow: scroll;
     }
 
+    form {
+        button {
+            font-size: 20px;
+            padding: 10px !important;
+        }
+    }
 }

@@ -119,7 +119,7 @@ const ChatRoom = () => {
                         </div>
                         <form className='box full-width nowrap' onSubmit={sendMessageHandler}>
                             <input value={message} onChange={(e) => setMessage(e.target.value)} placeholder={"type something..."} sx={{ flex: 1 }} />
-                            <button variant='contained' type='submit'>send</button>
+                            <button className='transparent' type='submit'>send</button>
                         </form>
                     </>
                 ) : (
