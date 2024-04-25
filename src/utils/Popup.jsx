@@ -10,6 +10,7 @@ import DisplayNotifications from './DisplayNotifications';
 
 import "../style/modal.css";
 import UserMenu from './UserMenu';
+import CreateRoom from './CreateRoom';
 
 const Popup = () => {
     const isOpen = useSelector(state => state.modalSlice.isOpen);
@@ -34,6 +35,9 @@ const Popup = () => {
                 )}
                 {window === "userMenu" && (
                     <UserMenu />
+                )}
+                {window === "create-room" && (
+                    <CreateRoom />
                 )}
             </div>
         </div>

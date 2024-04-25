@@ -1,8 +1,8 @@
 import React from 'react';
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import AvatarImg from './AvatarImg';
 import { db } from '../config/firebase';
 import { useSelector } from 'react-redux';
-import AvatarImg from './AvatarImg';
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 import "../style/listButton.css";
 
