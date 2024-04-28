@@ -45,6 +45,12 @@ main {
         height: calc(100vh - 100px);
     }
 
+    .title {
+        li {
+            flex: 1;
+        }
+    }
+
     .chat-body {
         overflow: scroll;
     }

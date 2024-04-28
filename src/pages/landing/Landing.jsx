@@ -1,11 +1,11 @@
 import { useDispatch } from 'react-redux';
-import { setError } from "../store/loaderSlice";
+import { setError } from "../../store/loaderSlice";
 import React, { useEffect, useState } from 'react';
 
 // components
-import Login from '../components/Login';
-import Signup from '../components/Signup';
-import { storage } from '../config/firebase';
+import Login from '../../components/Login';
+import Signup from '../../components/Signup';
+import { storage } from '../../config/firebase';
 import { getDownloadURL, ref } from 'firebase/storage';
 
 const Landing = () => {

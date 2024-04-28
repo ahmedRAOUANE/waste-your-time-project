@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { db } from '../config/firebase';
-import { setError } from '../store/loaderSlice';
+import { db } from '../../config/firebase';
+import { setError } from '../../store/loaderSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsOpen, setWindow } from '../store/modalSlice';
+import { setIsOpen, setWindow } from '../../store/modalSlice';
 import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 // components
-import Message from '../components/Message';
-import ListButton from '../components/ListButton';
+import Message from '../../components/Message';
+import ListButton from '../../components/ListButton';
 
 // icons
 import { Search } from '@mui/icons-material';
@@ -16,7 +16,7 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 // style
-import "../style/chatRoom.css";
+import "../../style/chatRoom.css";
 
 const ChatRoom = () => {
     const friendList = useSelector(state => state.friendListSlice.friendList);
@@ -84,7 +84,7 @@ const ChatRoom = () => {
                         {friendList
                             ? friendList.map((freind, idx) => (
                                 <ListButton style={{ marginBottom: '10px' }} key={idx} onclick={() => changeCurrentChatHandler(idx + 1, freind)} ele={freind} onlyName />
-                            )) 
+                            ))
                             : (
                                 <div>
                                     make some freinds first!
@@ -110,7 +110,7 @@ const ChatRoom = () => {
             <main className={`chat-container transparent box column nowrap ${currentChat ? "" : 'hide-in-small'}`}>
                 {currentChat ? (
                     <>
-                        <div className="title full-width">
+                        <div className="title box full-width">
                             <button onClick={() => changeCurrentChatHandler(null, null)} className="back-btn icon hide-in-large"><ArrowBackIosIcon /></button>
                             <ListButton onlyName ele={user} style={{ flex: '1' }} />
                         </div>
@@ -123,7 +123,7 @@ const ChatRoom = () => {
                         </form>
                     </>
                 ) : (
-                        <div>select a chat to start messaging</div>
+                    <div>select a chat to start messaging</div>
                 )}
             </main>
         </div>

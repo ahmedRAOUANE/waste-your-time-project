@@ -6,7 +6,7 @@ import { arrayUnion, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 
 import "../style/listButton.css";
 
-const ListButton = ({ ele, onclick, key, onlyName, style }) => {
+const ListButton = ({ ele, onclick, key, onlyName, style, noPhoto }) => {
     const user = useSelector(state => state.userSlice.user);
 
     const handleFreindRequest = async (status) => {
@@ -65,7 +65,7 @@ const ListButton = ({ ele, onclick, key, onlyName, style }) => {
     return (
         <li className='list-button btn transparent nowrap' onClick={onclick}>
             <div className="box user-info">
-                <AvatarImg photoURL={ele.photoURL !== null ? ele.photoURL : ""} />
+                {!noPhoto && <AvatarImg photoURL={ele.photoURL !== null ? ele.photoURL : ""} />}
                 {ele.displayName && (
                     <h3 className="disable-Guitters">{ele.displayName}</h3>
                 )}

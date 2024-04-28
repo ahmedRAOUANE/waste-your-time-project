@@ -1,13 +1,14 @@
+import { Link } from 'react-router-dom';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { db } from '../../config/firebase';
+import { setRooms } from "../../store/roomsSlice";
 import PersonIcon from '@mui/icons-material/Person';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsOpen, setWindow } from '../../store/modalSlice';
 import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
-import { db } from '../config/firebase';
-import { setRooms } from "../store/roomsSlice";
 
 // style
-import "../style/home.css";
-import { setIsOpen, setWindow } from '../store/modalSlice';
+import "../../style/home.css";
 
 const Home = () => {
     const user = useSelector(state => state.userSlice.user);
@@ -60,8 +61,18 @@ const Home = () => {
                 </div>
             </div>
             <div className="rooms-container box column transparent">
-                {rooms ? (
-                    <div className="room trasparent box column"></div>
+                {rooms.length > 0 ? (
+                    <div className="room trasparent box column full-width">
+                        <div className="box transparent full-width disable-shadow">
+                            {rooms.map((room, idx) => (
+                                <Link to={`/rooms/${room.id}`} key={idx} className="box column transparent disable-shadow">
+                                    <h3 className="title">{room.title}</h3>
+                                    <div className="desc">{room.desc}</div>
+                                </Link>
+                            ))}
+                        </div>
+                        <button onClick={createRoom} className='primary'>create room</button>
+                    </div>
                 ) : (
                     <div className="text transparent full-width box">
                         <p>you have no rooms for now!</p>

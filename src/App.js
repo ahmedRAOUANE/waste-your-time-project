@@ -18,14 +18,18 @@ import "./style/layout.css";
 import "./style/button.css";
 
 // pages
-import Home from "./pages/Home";
-import Rooms from "./pages/Rooms";
+import Home from "./pages/home/Home";
+import Rooms from "./pages/rooms/Rooms";
 import Popup from "./utils/Popup";
-import ChatRoom from "./pages/ChatRoom";
+import ChatRoom from "./pages/chatRoom/ChatRoom";
 import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
-import Profile from "./pages/Profile";
-import Landing from "./pages/Landing";
+import Profile from "./pages/profile/Profile";
+import Landing from "./pages/landing/Landing";
+import Room from "./pages/room/Room";
+import Page from "./pages/room/home/Page";
+import MyLibrary from "./pages/room/myLibrary/MyLibrary";
+import Store from "./pages/room/store/Store";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
@@ -103,7 +107,14 @@ const App = () => {
         {user ? (
           <Route path="/" element={<UserLayout />} >
             <Route index element={<Home />} />
-            <Route path="/rooms" element={<Rooms />} />
+            <Route path="/rooms" >
+              <Route index element={<Rooms />} />
+              <Route path="/rooms/:roomID" element={<Room />} >
+                <Route index element={<Page />} />
+                <Route path="/rooms/:roomID/my library" element={<MyLibrary />} />
+                <Route path="/rooms/:roomID/store" element={<Store />} />
+              </Route>
+            </Route>
             <Route path="/chat" element={<ChatRoom />} />
             <Route path="/profile/:uid" element={<Profile />} />
           </Route>
