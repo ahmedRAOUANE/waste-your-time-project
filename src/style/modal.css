@@ -8,10 +8,12 @@
     left: 0;
     align-items: center;
     justify-content: center;
+    z-index: 3000;
 
     >div {
         width: 90%;
-        height: 60%;
+        height: 70%;
+        max-height: 100%;
         margin: auto;
         padding: var(--main-padding);
         overflow: scroll;
@@ -78,4 +80,36 @@
             }
         }
     }
+
+                &.create-room-container {
+                    .create-room {
+                        background-color: #fff;
+                        height: auto;
+h2 {
+        font-size: 2.5em;
+    }
+
+    .file-holder {
+        .input-holder {
+            label {
+                margin: auto;
+            }
+        }
+
+        .books {
+            .book {
+                width: 100px;
+                overflow: hidden;
+                height: 140px;
+                flex-wrap: nowrap;
+                gap: 10px;
+
+                p {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+                                }
+                                }
 }

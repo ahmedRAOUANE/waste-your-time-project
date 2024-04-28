@@ -1,5 +1,4 @@
 import React from 'react';
-import { Modal, Paper } from '@mui/material';
 import { setResult } from '../store/searchSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsOpen, setWindow } from '../store/modalSlice';
@@ -10,6 +9,9 @@ import DisplayNotifications from './DisplayNotifications';
 
 import "../style/modal.css";
 import UserMenu from './UserMenu';
+import CreateRoom from './CreateRoom';
+import StateWindow from './StateWindow';
+import { useNavigate } from 'react-router-dom';
 
 const Popup = () => {
     const isOpen = useSelector(state => state.modalSlice.isOpen);
@@ -17,10 +19,17 @@ const Popup = () => {
 
     const dispatch = useDispatch();
 
+    const navigate = useNavigate();
+
     const handleClose = () => {
         dispatch(setIsOpen(false));
         dispatch(setWindow(""));
         dispatch(setResult(null));
+    }
+
+    const visitRoom = () => {
+        handleClose();
+        navigate(`/waste-your-time-project/rooms/`) // navigate to the room page
     }
 
     return isOpen && (
@@ -35,6 +44,27 @@ const Popup = () => {
                 {window === "userMenu" && (
                     <UserMenu />
                 )}
+                {window === "create-room" && (
+                    <CreateRoom />
+                )}
+                {window === "query success" && (
+                    <div className="success box transparent">
+                        <p>room created seccessfully!</p>
+                        <div className="actions box">
+                            <button className='primary' onClick={handleClose}>ok</button>
+                            <button className='accept' onClick={visitRoom}>visit Room</button>
+                        </div>
+                    </div>
+                )}
+                {/* {window === "query files" && (
+                    <div className="success box transparent">
+                        <p>files uploaded</p>
+                        <div className="actions box">
+                            <button className='primary' onClick={handleClose}>ok</button>
+                            <button className='accept' onClick={visitRoom}>visit Room</button>
+                        </div>
+                    </div>
+                )} */}
             </div>
         </div>
     )

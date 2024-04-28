@@ -1,19 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 // reducers
 import userSlice from "./userSlice";
+import roomsSlice from "./roomsSlice";
+import modalSlice from "./modalSlice";
+import searchSlice from "./searchSlice";
 import loaderSlice from "./loaderSlice";
 import friendListSlice from "./friendListSlice";
-import searchSlice from "./searchSlice";
-import modalSlice from "./modalSlice";
 import notificationSlice from "./notificationSlice";
 
 const store = configureStore({
   reducer: {
     userSlice,
+    modalSlice,
+    roomsSlice,
+    searchSlice,
     loaderSlice,
     friendListSlice,
-    searchSlice,
-    modalSlice,
     notificationSlice,
   },
 });

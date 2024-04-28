@@ -1,0 +1,14 @@
+.home {
+    align-items: normal;
+
+    .rooms-container {
+        margin: 0;
+        flex: 1;
+
+        .room {}
+
+        .text {
+            margin: 0;
+        }
+    }
+}

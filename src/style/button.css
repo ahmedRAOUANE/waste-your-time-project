@@ -11,8 +11,21 @@ button,
         background-color: red;
         color: white;
     }
-        &.accept {
+
+    &.accept {
         background-color: green;
+        color: white;
+    }
+
+    &.primary {
+        font-size: 17px;
+        padding: 10px 20px;
+    }
+
+    &.secondary {
+        font-size: 17px;
+        padding: 10px 20px;
+        background-color: var(--main-color);
         color: white;
     }
 }
