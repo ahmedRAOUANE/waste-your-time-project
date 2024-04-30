@@ -8,7 +8,14 @@ import { setIsOpen, setWindow } from '../../store/modalSlice';
 import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 
 // style
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+
+// style
 import "../../style/home.css";
+
+const customCardStyle = {
+    width: "120px", height: "160px", gap: "10px"
+}
 
 const Home = () => {
     const user = useSelector(state => state.userSlice.user);
@@ -60,25 +67,26 @@ const Home = () => {
                     <h2 className="title">{user.username}</h2>
                 </div>
             </div>
-            <div className="rooms-container box column transparent">
-                {rooms.length > 0 ? (
-                    <div className="room trasparent box column full-width">
-                        <div className="box transparent full-width disable-shadow">
+            <div className="rooms-container box column transparent disable-shadow align-items-top">
+                <div className="box transparent full-width disable-shadow align-items-left m-0">
+                    <div style={customCardStyle} className="text transparent box column card disable-shadow">
+                        <AddCircleOutlineIcon sx={{ fontSize: "40px" }} />
+                        <button onClick={createRoom} className='primary icon'>create room</button>
+                    </div>
+                    {rooms.length > 0 ? (
+                        <>
                             {rooms.map((room, idx) => (
-                                <Link to={`/rooms/${room.id}`} key={idx} className="box column transparent disable-shadow">
+                                <Link style={customCardStyle} to={`/rooms/${room.id}`} key={idx} className="box column transparent disable-shadow card m-0">
                                     <h3 className="title">{room.title}</h3>
                                     <div className="desc">{room.desc}</div>
                                 </Link>
-                            ))}
-                        </div>
-                        <button onClick={createRoom} className='primary'>create room</button>
-                    </div>
-                ) : (
-                    <div className="text transparent full-width box">
-                        <p>you have no rooms for now!</p>
-                        <button onClick={createRoom} className='primary'>create room</button>
-                    </div>
-                )}
+                            ))
+                            }
+                        </>
+                    ) : (
+                            <p>you have no rooms for now!</p>
+                    )}
+                </div>
             </div>
         </div>
     )

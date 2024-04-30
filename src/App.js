@@ -24,12 +24,8 @@ import Popup from "./utils/Popup";
 import ChatRoom from "./pages/chatRoom/ChatRoom";
 import Loading from "./components/Loading";
 import NotFound from "./components/NotFound";
-import Profile from "./pages/profile/Profile";
 import Landing from "./pages/landing/Landing";
 import Room from "./pages/room/Room";
-import Page from "./pages/room/home/Page";
-import MyLibrary from "./pages/room/myLibrary/MyLibrary";
-import Store from "./pages/room/store/Store";
 
 const App = () => {
   const user = useSelector((state) => state.userSlice.user);
@@ -109,14 +105,9 @@ const App = () => {
             <Route index element={<Home />} />
             <Route path="/rooms" >
               <Route index element={<Rooms />} />
-              <Route path="/rooms/:roomID" element={<Room />} >
-                <Route index element={<Page />} />
-                <Route path="/rooms/:roomID/my library" element={<MyLibrary />} />
-                <Route path="/rooms/:roomID/store" element={<Store />} />
-              </Route>
+              <Route path="/rooms/:roomID" element={<Room />} />
             </Route>
             <Route path="/chat" element={<ChatRoom />} />
-            <Route path="/profile/:uid" element={<Profile />} />
           </Route>
         ) : (
             <Route index element={<Landing />} />

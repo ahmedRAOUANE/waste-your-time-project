@@ -28,6 +28,11 @@ button,
         background-color: var(--main-color);
         color: white;
     }
+
+    &.card {
+        width: 70px;
+        padding: 10px;
+    }
 }
 
 .icon {
