@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState } from 'react';
 import { db, storage } from '../config/firebase';
 import { setIsOpen, setWindow } from '../store/modalSlice';
@@ -17,6 +17,8 @@ const CreateRoom = () => {
     const nameRef = useRef();
     const descRef = useRef();
     const fileRef = useRef();
+
+    const dispatch = useDispatch();
 
     const [booksURLs, setBooksURLs] = useState([]);
 
@@ -39,15 +41,24 @@ const CreateRoom = () => {
             const roomsDoc = await getDoc(roomsDocRef)
 
             if (roomsDoc.exists()) {
-                await updateDoc(roomsDocRef, {
-                    rooms: arrayUnion(payload)
-                }).then(
-                    () => {
-                        showState("success-window")
-                    }, () => {
-                        showState("failed-window")
+                const rooms = roomsDoc.data().rooms;
+
+                // chec if thers a room with the same type
+                const roomExisting = rooms.find(room => room.type === type);
+
+                if (!roomExisting) {
+                    await updateDoc(roomsDocRef, {
+                        rooms: arrayUnion(payload)
+                    }).then(
+                        () => {
+                            dispatch(setWindow("success-window"))
+                        }, () => {
+                        dispatch(setWindow("failed-window"))
                     }
-                )
+                    )
+                } else {
+                    alert("you can not create more than one room in type")
+                }
             }
         } catch (err) {
             console.log("Error creating a room: ", err);
@@ -62,6 +73,7 @@ const CreateRoom = () => {
             // console.log("file type: ", file.type);
             if (!file.type.startsWith('text/')
                 && !file.type.startsWith('application/pdf')
+                && !file.type.startsWith('application/docx')
             ) {
                 alert("Please upload only text files.");
                 return;
@@ -122,12 +134,6 @@ const CreateRoom = () => {
         }
 
         return roomContent;
-    }
-
-    const showState = (state) => {
-        setIsOpen(false);
-        setWindow(state);
-        setIsOpen(true);
     }
 
     return (

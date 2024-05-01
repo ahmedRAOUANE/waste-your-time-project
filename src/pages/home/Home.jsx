@@ -63,9 +63,9 @@ const Home = () => {
             <div className="rooms-container box column transparent">
                 {rooms.length > 0 ? (
                     <div className="room trasparent box column full-width">
-                        <div className="box transparent full-width disable-shadow">
+                        <div className="box transparent full-width disable-shadow align-items-left">
                             {rooms.map((room, idx) => (
-                                <Link to={`/rooms/${room.id}`} key={idx} className="box column transparent disable-shadow">
+                                <Link to={`/rooms/${room.id}`} key={idx} className="box column transparent disable-shadow card m-0">
                                     <h3 className="title">{room.title}</h3>
                                     <div className="desc">{room.desc}</div>
                                 </Link>
