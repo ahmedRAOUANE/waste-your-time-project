@@ -1,7 +1,9 @@
 button,
-.btn {
+.btn,
+input[type="button"],
+input[type="submit"] {
     padding: calc(var(--main-padding) / 2) var(--ligt-padding);
-    background-color: var(--light-color);
+    background-color: var(--primary-color);
     border-radius: 6px;
     cursor: pointer;
     color: inherit;
@@ -20,6 +22,8 @@ button,
     &.primary {
         font-size: 17px;
         padding: 10px 20px;
+        background-color: var(--primary-color);
+            color: var(--light-color);
     }
 
     &.secondary {
