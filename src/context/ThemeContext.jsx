@@ -11,7 +11,7 @@ export const ThemeProvider = ({ children }) => {
     useEffect(() => {
         const fetchTheme = async () => {
             if (user) {
-                const userDoc = await getDoc(doc(db, "users", user.uid));
+                const userDoc = await getDoc(doc(db, "usersProfile", user.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     setTheme(userData.theme || 'light');
@@ -32,7 +32,7 @@ export const ThemeProvider = ({ children }) => {
         setTheme(newTheme);
         document.documentElement.setAttribute('data-theme', newTheme);
         if (user) {
-            await setDoc(doc(db, "users", user.uid), { theme: newTheme }, { merge: true });
+            await setDoc(doc(db, "usersProfile", user.uid), { theme: newTheme }, { merge: true });
         } else {
             localStorage.setItem('theme', newTheme);
         }

@@ -1,42 +1,42 @@
 button,
 .btn,
 input[type="button"],
-input[type="submit"] {
-    padding: calc(var(--main-padding) / 2) var(--ligt-padding);
+input[type="submit"],
+a {
     background-color: var(--primary-color);
     border-radius: 6px;
     cursor: pointer;
     color: inherit;
     border: none;
-
-    &.danger {
-        background-color: red;
-        color: white;
-    }
-
-    &.accept {
-        background-color: green;
-        color: white;
-    }
-
-    &.primary {
-        font-size: 17px;
-        padding: 10px 20px;
-        background-color: var(--primary-color);
-            color: var(--light-color);
-    }
-
-    &.secondary {
-        font-size: 17px;
-        padding: 10px 20px;
-        background-color: var(--main-color);
-        color: white;
-    }
+    outline: none;
 
     &.card {
         width: 70px;
         padding: 10px;
     }
+}
+
+.danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.accept {
+    background-color: green;
+    color: white;
+}
+
+.primary {
+    font-size: 17px;
+    padding: 10px 20px;
+    color: var(--light-color);
+}
+
+.secondary {
+    font-size: 17px;
+    padding: 10px 20px;
+    background-color: var(--main-color);
+    color: white;
 }
 
 .icon {

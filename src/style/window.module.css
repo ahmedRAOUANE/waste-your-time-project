@@ -18,6 +18,8 @@
         padding: var(--main-padding);
         overflow: scroll;
         z-index: 3000;
+        background-color: var(--text-color);
+        color: var(--background-color);
 
         @media (min-width: 768px) {
             width: 60%;
@@ -58,10 +60,10 @@
         .notifications {}
     }
 
-    &.userMenu-container {
+    &.navListContainer {
         background-color: transparent;
 
-        .userMenu {
+        .navList {
             position: absolute;
             right: 10px;
             max-width: 250px;
@@ -81,35 +83,36 @@
         }
     }
 
-                &.create-room-container {
-                    .create-room {
-                        background-color: #fff;
-                        height: auto;
-h2 {
-        font-size: 2.5em;
-    }
+    &.create-room-container {
+        .create-room {
+            background-color: #fff;
+            height: auto;
 
-    .file-holder {
-        .input-holder {
-            label {
-                margin: auto;
+            h2 {
+                font-size: 2.5em;
             }
-        }
 
-        .books {
-            .book {
-                width: 100px;
-                overflow: hidden;
-                height: 140px;
-                flex-wrap: nowrap;
-                gap: 10px;
+            .file-holder {
+                .input-holder {
+                    label {
+                        margin: auto;
+                    }
+                }
 
-                p {
-                    max-width: 100%;
+                .books {
+                    .book {
+                        width: 100px;
+                        overflow: hidden;
+                        height: 140px;
+                        flex-wrap: nowrap;
+                        gap: 10px;
+
+                        p {
+                            max-width: 100%;
+                        }
+                    }
                 }
             }
         }
     }
-                                }
-                                }
 }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const modalSlice = createSlice({
+const windowSlice = createSlice({
     name: "modal",
     initialState: { isOpen: false, window: "" },
     reducers: {
@@ -13,6 +13,6 @@ const modalSlice = createSlice({
     }
 })
 
-export const { setIsOpen, setWindow } = modalSlice.actions;
+export const { setIsOpen, setWindow } = windowSlice.actions;
 
-export default modalSlice.reducer
+export default windowSlice.reducer
