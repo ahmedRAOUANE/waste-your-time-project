@@ -1,0 +1,7 @@
+.pdfViewer {
+    position: absolute;
+    height: 100vh;
+    background: white;
+    z-index: 4000;
+    /* overflow: scroll;*/
+}
