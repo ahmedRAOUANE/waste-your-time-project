@@ -1,0 +1,17 @@
+.list-button {
+    padding: var(--light-padding) var(--main-padding);
+
+    &:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
+    .user-info {
+        justify-content: flex-start;
+
+        h3 {
+            flex: 1;
+            box-shadow: none;
+            color: var(--main-color);
+        }
+    }
+}

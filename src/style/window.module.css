@@ -1,0 +1,118 @@
+.overlay {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(1px);
+    background-color: #f2f2f245;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+
+    >div {
+        width: 90%;
+        height: 70%;
+        max-height: 100%;
+        margin: auto;
+        padding: var(--main-padding);
+        overflow: scroll;
+        z-index: 3000;
+        background-color: var(--text-color);
+        color: var(--background-color);
+
+        @media (min-width: 768px) {
+            width: 60%;
+        }
+    }
+
+    &.search-container {
+        .search {
+            backdrop-filter: blur(50px);
+            background-color: #070e2adb;
+
+            .search-input {
+                gap: 0;
+                margin-bottom: 20px;
+
+                input {
+                    flex: 1;
+                }
+
+                button {
+                    color: white;
+                }
+            }
+
+            .search-msg {
+                height: 100%;
+
+                h4 {
+                    color: antiquewhite;
+                    letter-spacing: 4px;
+                    font-weight: 800;
+                }
+            }
+        }
+    }
+
+    &.notifications-container {
+        .notifications {}
+    }
+
+    &.navListContainer {
+        background-color: transparent;
+
+        .navList {
+            position: absolute;
+            right: 10px;
+            max-width: 250px;
+            top: 67px;
+            height: fit-content;
+            padding: var(--light-padding);
+
+            ul {
+                li {
+                    padding: var(--light-padding);
+
+                    &:not(:last-child) {
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    &.create-room-container {
+        .create-room {
+            background-color: #fff;
+            height: auto;
+
+            h2 {
+                font-size: 2.5em;
+            }
+
+            .file-holder {
+                .input-holder {
+                    label {
+                        margin: auto;
+                    }
+                }
+
+                .books {
+                    .book {
+                        width: 100px;
+                        overflow: hidden;
+                        height: 140px;
+                        flex-wrap: nowrap;
+                        gap: 10px;
+
+                        p {
+                            max-width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

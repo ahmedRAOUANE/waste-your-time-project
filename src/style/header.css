@@ -1,0 +1,49 @@
+header {
+    padding: var(--light-padding) var(--main-padding);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    margin-bottom: var(--main-padding);
+
+    h1 {
+        margin: 0;
+    }
+
+    .search-input {
+        gap: 0;
+        cursor: pointer;
+
+        input {
+            flex: 1;
+            border-radius: 10px;
+        }
+    }
+
+    ul {
+        &.hide-in-large {
+            justify-content: center;
+        }
+
+        li {}
+    }
+
+    .avatar-container {
+        position: relative;
+        border-radius: 50%;
+
+        .badge {
+            width: 25px;
+            height: 25px;
+            background-color: red;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 3;
+            left: -4px;
+            top: -7px;
+            box-shadow: var(--out-line), var(--main-shadow);
+        }
+
+        .avatar-image {}
+    }
+}
