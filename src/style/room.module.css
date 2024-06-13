@@ -1,0 +1,14 @@
+.library {
+    color: white;
+
+    .book {
+        color: black;
+        overflow: hidden;
+
+        h4 {
+            font-size: 16px;
+            margin: 0;
+            max-width: 100%;
+        }
+    }
+}
